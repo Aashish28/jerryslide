@@ -844,9 +844,7 @@ function encodeUriQuery(val, pctEncodeSpaces) {
  * @element ANY
  * @param {angular.Module} ngApp an optional application
  *   {@link angular.module module} name to load.
- *
- * @description
- *
+ * 
  * Use this directive to **auto-bootstrap** an AngularJS application. The `ngApp` directive
  * designates the **root element** of the application and is typically placed near the root element
  * of the page - e.g. on the `<body>` or `<html>` tags.
@@ -864,7 +862,6 @@ function encodeUriQuery(val, pctEncodeSpaces) {
  * In the example below if the `ngApp` directive were not placed on the `html` element then the
  * document would not be compiled, the `AppController` would not be instantiated and the `{{ a+b }}`
  * would not be resolved to `3`.
- *
  * `ngApp` is the easiest, and most common, way to bootstrap an application.
  *
  <example module="ngAppDemo">
@@ -927,10 +924,6 @@ function angularInit(element, bootstrap) {
 }
 
 /**
- * @ngdoc function
- * @name angular.bootstrap
- * @module ng
- * @description
  * Use this function to manually start up angular application.
  *
  * See: {@link guide/bootstrap Bootstrap}
@@ -942,36 +935,6 @@ function angularInit(element, bootstrap) {
  * first loaded script to be bootstrapped and will report a warning to the browser console for
  * each of the subsequent scripts.   This prevents strange results in applications, where otherwise
  * multiple instances of Angular try to work on the DOM.
- *
- * <example name="multi-bootstrap" module="multi-bootstrap">
- * <file name="index.html">
- * <script src="../../../angular.js"></script>
- * <div ng-controller="BrokenTable">
- *   <table>
- *   <tr>
- *     <th ng-repeat="heading in headings">{{heading}}</th>
- *   </tr>
- *   <tr ng-repeat="filling in fillings">
- *     <td ng-repeat="fill in filling">{{fill}}</td>
- *   </tr>
- * </table>
- * </div>
- * </file>
- * <file name="controller.js">
- * var app = angular.module('multi-bootstrap', [])
- *
- * .controller('BrokenTable', function($scope) {
- *     $scope.headings = ['One', 'Two', 'Three'];
- *     $scope.fillings = [[1, 2, 3], ['A', 'B', 'C'], [7, 8, 9]];
- * });
- * </file>
- * <file name="protractor.js" type="protractor">
- * it('should only insert one table cell for each item in $scope.fillings', function() {
- *  expect(element.all(by.css('td')).count())
- *      .toBe(9);
- * });
- * </file>
- * </example>
  *
  * @param {DOMElement} element DOM element which is the root of angular application.
  * @param {Array<String|Function|Array>=} modules an array of modules to load into the application.
@@ -988,7 +951,6 @@ function bootstrap(element, modules) {
       var tag = (element[0] === document) ? 'document' : startingTag(element);
       throw ngMinErr('btstrpd', "App Already Bootstrapped with this Element '{0}'", tag);
     }
-
     modules = modules || [];
     modules.unshift(['$provide', function($provide) {
       $provide.value('$rootElement', element);
@@ -1092,7 +1054,6 @@ function assertNotHasOwnProperty(name, context) {
  * @param {boolean} [bindFnToScope=true]
  * @returns {Object} value as accessible by path
  */
-//TODO(misko): this function needs to be removed
 function getter(obj, path, bindFnToScope) {
   if (!path) return obj;
   var keys = path.split('.');
@@ -1123,7 +1084,6 @@ function getBlockElements(nodes) {
   if (startNode === endNode) {
     return jqLite(startNode);
   }
-
   var element = startNode;
   var elements = [element];
 
@@ -1136,14 +1096,7 @@ function getBlockElements(nodes) {
   return jqLite(elements);
 }
 
-/**
- * @ngdoc type
- * @name angular.Module
- * @module ng
- * @description
- *
- * Interface for configuring angular {@link angular.module modules}.
- */
+//Interface for configuring angular {@link angular.module modules}.
 
 function setupModuleLoader(window) {
 
@@ -1164,11 +1117,6 @@ function setupModuleLoader(window) {
     var modules = {};
 
     /**
-     * @ngdoc function
-     * @name angular.module
-     * @module ng
-     * @description
-     *
      * The `angular.module` is a global place for creating, registering and retrieving Angular
      * modules.
      * All modules (angular core or 3rd party) that should be available to an application must be
@@ -1177,9 +1125,7 @@ function setupModuleLoader(window) {
      * When passed two or more arguments, a new module is created.  If passed only one argument, an
      * existing module (the name passed as the first argument to `module`) is retrieved.
      *
-     *
      * # Module
-     *
      * A module is a collection of services, directives, controllers, filters, and configuration information.
      * `angular.module` is used to configure the {@link auto.$injector $injector}.
      *
@@ -1196,7 +1142,6 @@ function setupModuleLoader(window) {
      *   $locationProvider.hashPrefix('!');
      * }]);
      * ```
-     *
      * Then you can create an injector and load your modules like this:
      *
      * ```js
@@ -1266,7 +1211,6 @@ function setupModuleLoader(window) {
            */
           name: name,
 
-
           /**
            * @ngdoc method
            * @name angular.Module#provider
@@ -1334,8 +1278,6 @@ function setupModuleLoader(window) {
            * @description
            *
            * **NOTE**: animations take effect only if the **ngAnimate** module is loaded.
-           *
-           *
            * Defines an animation hook that can be later used with
            * {@link ngAnimate.$animate $animate} service and directives that use this service.
            *
@@ -1444,95 +1386,14 @@ function setupModuleLoader(window) {
       });
     };
   });
-
 }
-
-/* global
-    angularModule: true,
-    version: true,
-
-    $LocaleProvider,
-    $CompileProvider,
-
-    htmlAnchorDirective,
-    inputDirective,
-    inputDirective,
-    formDirective,
-    scriptDirective,
-    selectDirective,
-    styleDirective,
-    optionDirective,
-    ngBindDirective,
-    ngBindHtmlDirective,
-    ngBindTemplateDirective,
-    ngClassDirective,
-    ngClassEvenDirective,
-    ngClassOddDirective,
-    ngCspDirective,
-    ngCloakDirective,
-    ngControllerDirective,
-    ngFormDirective,
-    ngHideDirective,
-    ngIfDirective,
-    ngIncludeDirective,
-    ngIncludeFillContentDirective,
-    ngInitDirective,
-    ngNonBindableDirective,
-    ngPluralizeDirective,
-    ngRepeatDirective,
-    ngShowDirective,
-    ngStyleDirective,
-    ngSwitchDirective,
-    ngSwitchWhenDirective,
-    ngSwitchDefaultDirective,
-    ngOptionsDirective,
-    ngTranscludeDirective,
-    ngModelDirective,
-    ngListDirective,
-    ngChangeDirective,
-    requiredDirective,
-    requiredDirective,
-    ngValueDirective,
-    ngAttributeAliasDirectives,
-    ngEventDirectives,
-
-    $AnchorScrollProvider,
-    $AnimateProvider,
-    $BrowserProvider,
-    $CacheFactoryProvider,
-    $ControllerProvider,
-    $DocumentProvider,
-    $ExceptionHandlerProvider,
-    $FilterProvider,
-    $InterpolateProvider,
-    $IntervalProvider,
-    $HttpProvider,
-    $HttpBackendProvider,
-    $LocationProvider,
-    $LogProvider,
-    $ParseProvider,
-    $RootScopeProvider,
-    $QProvider,
-    $$SanitizeUriProvider,
-    $SceProvider,
-    $SceDelegateProvider,
-    $SnifferProvider,
-    $TemplateCacheProvider,
-    $TimeoutProvider,
-    $$RAFProvider,
-    $$AsyncCallbackProvider,
-    $WindowProvider
-*/
-
 
 /**
  * @ngdoc object
  * @name angular.version
  * @module ng
- * @description
  * An object that contains information about the current AngularJS version. This object has the
  * following properties:
- *
  * - `full` – `{string}` – Full version string, such as "0.9.18".
  * - `major` – `{number}` – Major version number, such as "0".
  * - `minor` – `{number}` – Minor version number, such as "9".
@@ -1546,7 +1407,6 @@ var version = {
   dot: 18,
   codeName: 'ear-extendability'
 };
-
 
 function publishExternalAPI(angular){
   extend(angular, {
@@ -1668,17 +1528,7 @@ function publishExternalAPI(angular){
   ]);
 }
 
-/* global
-
-  -JQLitePrototype,
-  -addEventListenerFn,
-  -removeEventListenerFn,
-  -BOOLEAN_ATTR
-*/
-
-//////////////////////////////////
 //JQLite
-//////////////////////////////////
 
 /**
  * @ngdoc function
@@ -1704,7 +1554,6 @@ function publishExternalAPI(angular){
  *
  * ## Angular's jqLite
  * jqLite provides only the following jQuery methods:
- *
  * - [`addClass()`](http://api.jquery.com/addClass/)
  * - [`after()`](http://api.jquery.com/after/)
  * - [`append()`](http://api.jquery.com/append/)
@@ -1776,16 +1625,12 @@ var jqCache = JQLite.cache = {},
       ? function(element, type, fn) {element.removeEventListener(type, fn, false); }
       : function(element, type, fn) {element.detachEvent('on' + type, fn); });
 
-/*
- * !!! This is an undocumented "private" function !!!
- */
 var jqData = JQLite._data = function(node) {
   //jQuery always returns an object on cache miss
   return this.cache[node[this.expando]] || {};
 };
 
 function jqNextId() { return ++jqId; }
-
 
 var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
 var MOZ_HACK_REGEXP = /^moz([A-Z])/;
@@ -1804,13 +1649,9 @@ function camelCase(name) {
     replace(MOZ_HACK_REGEXP, 'Moz$1');
 }
 
-/////////////////////////////////////////////
 // jQuery mutation patch
-//
 // In conjunction with bindJQuery intercepts all jQuery's DOM destruction apis and fires a
 // $destroy event on all DOM nodes being removed.
-//
-/////////////////////////////////////////////
 
 function jqLitePatchJQueryRemove(name, dispatchThis, filterElems, getterIfNoArguments) {
   var originalJqFn = jQuery.fn[name];
@@ -1916,7 +1757,6 @@ function jqLiteParseHTML(html, context) {
   return jqLiteBuildFragment(html, context);
 }
 
-/////////////////////////////////////////////
 function JQLite(element) {
   if (element instanceof JQLite) {
     return element;
@@ -2100,7 +1940,6 @@ function jqLiteInheritedData(element, name, value) {
     for (var i = 0, ii = names.length; i < ii; i++) {
       if ((value = element.data(names[i])) !== undefined) return value;
     }
-
     // If dealing with a document fragment node with a host element, and no parent, use the host
     // element as the parent. This enables directives within a Shadow DOM or polyfilled Shadow DOM
     // to lookup parent controllers.
@@ -2117,9 +1956,8 @@ function jqLiteEmpty(element) {
   }
 }
 
-//////////////////////////////////////////
 // Functions which are declared directly.
-//////////////////////////////////////////
+
 var JQLitePrototype = JQLite.prototype = {
   ready: function(fn) {
     var fired = false;
@@ -2157,11 +1995,10 @@ var JQLitePrototype = JQLite.prototype = {
   splice: [].splice
 };
 
-//////////////////////////////////////////
 // Functions iterating getter/setters.
 // these functions return self on setter and
 // value on get.
-//////////////////////////////////////////
+
 var BOOLEAN_ATTR = {};
 forEach('multiple,selected,checked,disabled,readOnly,required,open'.split(','), function(value) {
   BOOLEAN_ATTR[lowercase(value)] = value;
@@ -2344,7 +2181,6 @@ forEach({
         return this;
       } else {
         // we are a read, so read the first child.
-        // TODO: do we still need this?
         var value = fn.$dv;
         // Only if we have $dv do we iterate over all, otherwise it is just the first element.
         var jj = (value === undefined) ? Math.min(nodeCount, 1) : nodeCount;
@@ -2421,11 +2257,9 @@ function createEventHandler(element, events) {
   return eventHandler;
 }
 
-//////////////////////////////////////////
 // Functions iterating traversal.
-// These functions chain results into a single
-// selector.
-//////////////////////////////////////////
+// These functions chain results into a single selector.
+
 forEach({
   removeData: jqLiteRemoveData,
 
@@ -2498,8 +2332,7 @@ forEach({
   one: function(element, type, fn) {
     element = jqLite(element);
 
-    //add the listener twice so that when it is called
-    //you can remove the original function and still be
+    //add the listener twice so that when it is called you can remove the original function and still be
     //able to call element.off(ev, fn) normally
     element.on(type, function onFn() {
       element.off(type, fn);
@@ -2726,8 +2559,6 @@ HashMap.prototype = {
  * @module ng
  * @name angular.injector
  * @kind function
- *
- * @description
  * Creates an injector function that can be used for retrieving services as well as for
  * dependency injection (see {@link guide/di dependency injection}).
  *
@@ -2749,7 +2580,6 @@ HashMap.prototype = {
  *     $rootScope.$digest();
  *   });
  * ```
- *
  * Sometimes you want to get access to the injector of a currently running Angular app
  * from outside Angular. Perhaps, you want to inject and compile some markup after the
  * application has been bootstrapped. You can do this using the extra `injector()` added
@@ -2773,12 +2603,10 @@ HashMap.prototype = {
  * ```
  */
 
-
 /**
  * @ngdoc module
  * @name auto
  * @description
- *
  * Implicit module which gets automatically added to each {@link auto.$injector $injector}.
  */
 
@@ -2816,497 +2644,6 @@ function annotate(fn) {
   }
   return $inject;
 }
-
-///////////////////////////////////////
-
-/**
- * @ngdoc service
- * @name $injector
- * @kind function
- *
- * @description
- *
- * `$injector` is used to retrieve object instances as defined by
- * {@link auto.$provide provider}, instantiate types, invoke methods,
- * and load modules.
- *
- * The following always holds true:
- *
- * ```js
- *   var $injector = angular.injector();
- *   expect($injector.get('$injector')).toBe($injector);
- *   expect($injector.invoke(function($injector){
- *     return $injector;
- *   }).toBe($injector);
- * ```
- *
- * # Injection Function Annotation
- *
- * JavaScript does not have annotations, and annotations are needed for dependency injection. The
- * following are all valid ways of annotating function with injection arguments and are equivalent.
- *
- * ```js
- *   // inferred (only works if code not minified/obfuscated)
- *   $injector.invoke(function(serviceA){});
- *
- *   // annotated
- *   function explicit(serviceA) {};
- *   explicit.$inject = ['serviceA'];
- *   $injector.invoke(explicit);
- *
- *   // inline
- *   $injector.invoke(['serviceA', function(serviceA){}]);
- * ```
- *
- * ## Inference
- *
- * In JavaScript calling `toString()` on a function returns the function definition. The definition
- * can then be parsed and the function arguments can be extracted. *NOTE:* This does not work with
- * minification, and obfuscation tools since these tools change the argument names.
- *
- * ## `$inject` Annotation
- * By adding an `$inject` property onto a function the injection parameters can be specified.
- *
- * ## Inline
- * As an array of injection names, where the last item in the array is the function to call.
- */
-
-/**
- * @ngdoc method
- * @name $injector#get
- *
- * @description
- * Return an instance of the service.
- *
- * @param {string} name The name of the instance to retrieve.
- * @return {*} The instance.
- */
-
-/**
- * @ngdoc method
- * @name $injector#invoke
- *
- * @description
- * Invoke the method and supply the method arguments from the `$injector`.
- *
- * @param {!Function} fn The function to invoke. Function parameters are injected according to the
- *   {@link guide/di $inject Annotation} rules.
- * @param {Object=} self The `this` for the invoked method.
- * @param {Object=} locals Optional object. If preset then any argument names are read from this
- *                         object first, before the `$injector` is consulted.
- * @returns {*} the value returned by the invoked `fn` function.
- */
-
-/**
- * @ngdoc method
- * @name $injector#has
- *
- * @description
- * Allows the user to query if the particular service exists.
- *
- * @param {string} Name of the service to query.
- * @returns {boolean} returns true if injector has given service.
- */
-
-/**
- * @ngdoc method
- * @name $injector#instantiate
- * @description
- * Create a new instance of JS type. The method takes a constructor function, invokes the new
- * operator, and supplies all of the arguments to the constructor function as specified by the
- * constructor annotation.
- *
- * @param {Function} Type Annotated constructor function.
- * @param {Object=} locals Optional object. If preset then any argument names are read from this
- * object first, before the `$injector` is consulted.
- * @returns {Object} new instance of `Type`.
- */
-
-/**
- * @ngdoc method
- * @name $injector#annotate
- *
- * @description
- * Returns an array of service names which the function is requesting for injection. This API is
- * used by the injector to determine which services need to be injected into the function when the
- * function is invoked. There are three ways in which the function can be annotated with the needed
- * dependencies.
- *
- * # Argument names
- *
- * The simplest form is to extract the dependencies from the arguments of the function. This is done
- * by converting the function into a string using `toString()` method and extracting the argument
- * names.
- * ```js
- *   // Given
- *   function MyController($scope, $route) {
- *     // ...
- *   }
- *
- *   // Then
- *   expect(injector.annotate(MyController)).toEqual(['$scope', '$route']);
- * ```
- *
- * This method does not work with code minification / obfuscation. For this reason the following
- * annotation strategies are supported.
- *
- * # The `$inject` property
- *
- * If a function has an `$inject` property and its value is an array of strings, then the strings
- * represent names of services to be injected into the function.
- * ```js
- *   // Given
- *   var MyController = function(obfuscatedScope, obfuscatedRoute) {
- *     // ...
- *   }
- *   // Define function dependencies
- *   MyController['$inject'] = ['$scope', '$route'];
- *
- *   // Then
- *   expect(injector.annotate(MyController)).toEqual(['$scope', '$route']);
- * ```
- *
- * # The array notation
- *
- * It is often desirable to inline Injected functions and that's when setting the `$inject` property
- * is very inconvenient. In these situations using the array notation to specify the dependencies in
- * a way that survives minification is a better choice:
- *
- * ```js
- *   // We wish to write this (not minification / obfuscation safe)
- *   injector.invoke(function($compile, $rootScope) {
- *     // ...
- *   });
- *
- *   // We are forced to write break inlining
- *   var tmpFn = function(obfuscatedCompile, obfuscatedRootScope) {
- *     // ...
- *   };
- *   tmpFn.$inject = ['$compile', '$rootScope'];
- *   injector.invoke(tmpFn);
- *
- *   // To better support inline function the inline annotation is supported
- *   injector.invoke(['$compile', '$rootScope', function(obfCompile, obfRootScope) {
- *     // ...
- *   }]);
- *
- *   // Therefore
- *   expect(injector.annotate(
- *      ['$compile', '$rootScope', function(obfus_$compile, obfus_$rootScope) {}])
- *    ).toEqual(['$compile', '$rootScope']);
- * ```
- *
- * @param {Function|Array.<string|Function>} fn Function for which dependent service names need to
- * be retrieved as described above.
- *
- * @returns {Array.<string>} The names of the services which the function requires.
- */
-
-
-
-
-/**
- * @ngdoc object
- * @name $provide
- *
- * @description
- *
- * The {@link auto.$provide $provide} service has a number of methods for registering components
- * with the {@link auto.$injector $injector}. Many of these functions are also exposed on
- * {@link angular.Module}.
- *
- * An Angular **service** is a singleton object created by a **service factory**.  These **service
- * factories** are functions which, in turn, are created by a **service provider**.
- * The **service providers** are constructor functions. When instantiated they must contain a
- * property called `$get`, which holds the **service factory** function.
- *
- * When you request a service, the {@link auto.$injector $injector} is responsible for finding the
- * correct **service provider**, instantiating it and then calling its `$get` **service factory**
- * function to get the instance of the **service**.
- *
- * Often services have no configuration options and there is no need to add methods to the service
- * provider.  The provider will be no more than a constructor function with a `$get` property. For
- * these cases the {@link auto.$provide $provide} service has additional helper methods to register
- * services without specifying a provider.
- *
- * * {@link auto.$provide#provider provider(provider)} - registers a **service provider** with the
- *     {@link auto.$injector $injector}
- * * {@link auto.$provide#constant constant(obj)} - registers a value/object that can be accessed by
- *     providers and services.
- * * {@link auto.$provide#value value(obj)} - registers a value/object that can only be accessed by
- *     services, not providers.
- * * {@link auto.$provide#factory factory(fn)} - registers a service **factory function**, `fn`,
- *     that will be wrapped in a **service provider** object, whose `$get` property will contain the
- *     given factory function.
- * * {@link auto.$provide#service service(class)} - registers a **constructor function**, `class`
- *     that will be wrapped in a **service provider** object, whose `$get` property will instantiate
- *      a new object using the given constructor function.
- *
- * See the individual methods for more information and examples.
- */
-
-/**
- * @ngdoc method
- * @name $provide#provider
- * @description
- *
- * Register a **provider function** with the {@link auto.$injector $injector}. Provider functions
- * are constructor functions, whose instances are responsible for "providing" a factory for a
- * service.
- *
- * Service provider names start with the name of the service they provide followed by `Provider`.
- * For example, the {@link ng.$log $log} service has a provider called
- * {@link ng.$logProvider $logProvider}.
- *
- * Service provider objects can have additional methods which allow configuration of the provider
- * and its service. Importantly, you can configure what kind of service is created by the `$get`
- * method, or how that service will act. For example, the {@link ng.$logProvider $logProvider} has a
- * method {@link ng.$logProvider#debugEnabled debugEnabled}
- * which lets you specify whether the {@link ng.$log $log} service will log debug messages to the
- * console or not.
- *
- * @param {string} name The name of the instance. NOTE: the provider will be available under `name +
-                        'Provider'` key.
- * @param {(Object|function())} provider If the provider is:
- *
- *   - `Object`: then it should have a `$get` method. The `$get` method will be invoked using
- *     {@link auto.$injector#invoke $injector.invoke()} when an instance needs to be created.
- *   - `Constructor`: a new instance of the provider will be created using
- *     {@link auto.$injector#instantiate $injector.instantiate()}, then treated as `object`.
- *
- * @returns {Object} registered provider instance
-
- * @example
- *
- * The following example shows how to create a simple event tracking service and register it using
- * {@link auto.$provide#provider $provide.provider()}.
- *
- * ```js
- *  // Define the eventTracker provider
- *  function EventTrackerProvider() {
- *    var trackingUrl = '/track';
- *
- *    // A provider method for configuring where the tracked events should been saved
- *    this.setTrackingUrl = function(url) {
- *      trackingUrl = url;
- *    };
- *
- *    // The service factory function
- *    this.$get = ['$http', function($http) {
- *      var trackedEvents = {};
- *      return {
- *        // Call this to track an event
- *        event: function(event) {
- *          var count = trackedEvents[event] || 0;
- *          count += 1;
- *          trackedEvents[event] = count;
- *          return count;
- *        },
- *        // Call this to save the tracked events to the trackingUrl
- *        save: function() {
- *          $http.post(trackingUrl, trackedEvents);
- *        }
- *      };
- *    }];
- *  }
- *
- *  describe('eventTracker', function() {
- *    var postSpy;
- *
- *    beforeEach(module(function($provide) {
- *      // Register the eventTracker provider
- *      $provide.provider('eventTracker', EventTrackerProvider);
- *    }));
- *
- *    beforeEach(module(function(eventTrackerProvider) {
- *      // Configure eventTracker provider
- *      eventTrackerProvider.setTrackingUrl('/custom-track');
- *    }));
- *
- *    it('tracks events', inject(function(eventTracker) {
- *      expect(eventTracker.event('login')).toEqual(1);
- *      expect(eventTracker.event('login')).toEqual(2);
- *    }));
- *
- *    it('saves to the tracking url', inject(function(eventTracker, $http) {
- *      postSpy = spyOn($http, 'post');
- *      eventTracker.event('login');
- *      eventTracker.save();
- *      expect(postSpy).toHaveBeenCalled();
- *      expect(postSpy.mostRecentCall.args[0]).not.toEqual('/track');
- *      expect(postSpy.mostRecentCall.args[0]).toEqual('/custom-track');
- *      expect(postSpy.mostRecentCall.args[1]).toEqual({ 'login': 1 });
- *    }));
- *  });
- * ```
- */
-
-/**
- * @ngdoc method
- * @name $provide#factory
- * @description
- *
- * Register a **service factory**, which will be called to return the service instance.
- * This is short for registering a service where its provider consists of only a `$get` property,
- * which is the given service factory function.
- * You should use {@link auto.$provide#factory $provide.factory(getFn)} if you do not need to
- * configure your service in a provider.
- *
- * @param {string} name The name of the instance.
- * @param {function()} $getFn The $getFn for the instance creation. Internally this is a short hand
- *                            for `$provide.provider(name, {$get: $getFn})`.
- * @returns {Object} registered provider instance
- *
- * @example
- * Here is an example of registering a service
- * ```js
- *   $provide.factory('ping', ['$http', function($http) {
- *     return function ping() {
- *       return $http.send('/ping');
- *     };
- *   }]);
- * ```
- * You would then inject and use this service like this:
- * ```js
- *   someModule.controller('Ctrl', ['ping', function(ping) {
- *     ping();
- *   }]);
- * ```
- */
-
-
-/**
- * @ngdoc method
- * @name $provide#service
- * @description
- *
- * Register a **service constructor**, which will be invoked with `new` to create the service
- * instance.
- * This is short for registering a service where its provider's `$get` property is the service
- * constructor function that will be used to instantiate the service instance.
- *
- * You should use {@link auto.$provide#service $provide.service(class)} if you define your service
- * as a type/class.
- *
- * @param {string} name The name of the instance.
- * @param {Function} constructor A class (constructor function) that will be instantiated.
- * @returns {Object} registered provider instance
- *
- * @example
- * Here is an example of registering a service using
- * {@link auto.$provide#service $provide.service(class)}.
- * ```js
- *   var Ping = function($http) {
- *     this.$http = $http;
- *   };
- *
- *   Ping.$inject = ['$http'];
- *
- *   Ping.prototype.send = function() {
- *     return this.$http.get('/ping');
- *   };
- *   $provide.service('ping', Ping);
- * ```
- * You would then inject and use this service like this:
- * ```js
- *   someModule.controller('Ctrl', ['ping', function(ping) {
- *     ping.send();
- *   }]);
- * ```
- */
-
-
-/**
- * @ngdoc method
- * @name $provide#value
- * @description
- *
- * Register a **value service** with the {@link auto.$injector $injector}, such as a string, a
- * number, an array, an object or a function.  This is short for registering a service where its
- * provider's `$get` property is a factory function that takes no arguments and returns the **value
- * service**.
- *
- * Value services are similar to constant services, except that they cannot be injected into a
- * module configuration function (see {@link angular.Module#config}) but they can be overridden by
- * an Angular
- * {@link auto.$provide#decorator decorator}.
- *
- * @param {string} name The name of the instance.
- * @param {*} value The value.
- * @returns {Object} registered provider instance
- *
- * @example
- * Here are some examples of creating value services.
- * ```js
- *   $provide.value('ADMIN_USER', 'admin');
- *
- *   $provide.value('RoleLookup', { admin: 0, writer: 1, reader: 2 });
- *
- *   $provide.value('halfOf', function(value) {
- *     return value / 2;
- *   });
- * ```
- */
-
-
-/**
- * @ngdoc method
- * @name $provide#constant
- * @description
- *
- * Register a **constant service**, such as a string, a number, an array, an object or a function,
- * with the {@link auto.$injector $injector}. Unlike {@link auto.$provide#value value} it can be
- * injected into a module configuration function (see {@link angular.Module#config}) and it cannot
- * be overridden by an Angular {@link auto.$provide#decorator decorator}.
- *
- * @param {string} name The name of the constant.
- * @param {*} value The constant value.
- * @returns {Object} registered instance
- *
- * @example
- * Here a some examples of creating constants:
- * ```js
- *   $provide.constant('SHARD_HEIGHT', 306);
- *
- *   $provide.constant('MY_COLOURS', ['red', 'blue', 'grey']);
- *
- *   $provide.constant('double', function(value) {
- *     return value * 2;
- *   });
- * ```
- */
-
-
-/**
- * @ngdoc method
- * @name $provide#decorator
- * @description
- *
- * Register a **service decorator** with the {@link auto.$injector $injector}. A service decorator
- * intercepts the creation of a service, allowing it to override or modify the behaviour of the
- * service. The object returned by the decorator may be the original service, or a new service
- * object which replaces or wraps and delegates to the original service.
- *
- * @param {string} name The name of the service to decorate.
- * @param {function()} decorator This function will be invoked when the service needs to be
- *    instantiated and should return the decorated service instance. The function is called using
- *    the {@link auto.$injector#invoke injector.invoke} method and is therefore fully injectable.
- *    Local injection arguments:
- *
- *    * `$delegate` - The original service instance, which can be monkey patched, configured,
- *      decorated or delegated to.
- *
- * @example
- * Here we decorate the {@link ng.$log $log} service to convert warnings to errors by intercepting
- * calls to {@link ng.$log#error $log.warn()}.
- * ```js
- *   $provide.decorator('$log', ['$delegate', function($delegate) {
- *     $delegate.warn = $delegate.error;
- *     return $delegate;
- *   }]);
- * ```
- */
-
 
 function createInjector(modulesToLoad) {
   var INSTANTIATING = {},
