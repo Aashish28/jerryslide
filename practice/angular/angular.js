@@ -1,37 +1,6 @@
-/**
- * @license AngularJS v1.2.18
- * (c) 2010-2014 Google, Inc. http://angularjs.org
- * License: MIT
- */
+
 (function(window, document, undefined) {'use strict';
 
-/**
- * @description
- *
- * This object provides a utility for producing rich Error messages within
- * Angular. It can be called as follows:
- *
- * var exampleMinErr = minErr('example');
- * throw exampleMinErr('one', 'This {0} is {1}', foo, bar);
- *
- * The above creates an instance of minErr in the example namespace. The
- * resulting error will have a namespaced error code of example.one.  The
- * resulting error will replace {0} with the value of foo, and {1} with the
- * value of bar. The object is not restricted in the number of arguments it can
- * take.
- *
- * If fewer arguments are specified than necessary for interpolation, the extra
- * interpolation markers will be preserved in the final string.
- *
- * Since data will be parsed statically during a build step, some restrictions
- * are applied with respect to how minErr instances are created and called.
- * Instances should have names of the form namespaceMinErr for a minErr created
- * using minErr('namespace') . Error codes, namespaces and template strings
- * should all be static strings, not variables or general expressions.
- *
- * @param {string} module The namespace to use for the new minErr instance.
- * @returns {function(code:string, template:string, ...templateArgs): Error} minErr instance
- */
 
 function minErr(module) {
   return function () {
@@ -79,93 +48,6 @@ function minErr(module) {
   };
 }
 
-/* We need to tell jshint what variables are being exported */
-/* global
-    -angular,
-    -msie,
-    -jqLite,
-    -jQuery,
-    -slice,
-    -push,
-    -toString,
-    -ngMinErr,
-    -angularModule,
-    -nodeName_,
-    -uid,
-
-    -lowercase,
-    -uppercase,
-    -manualLowercase,
-    -manualUppercase,
-    -nodeName_,
-    -isArrayLike,
-    -forEach,
-    -sortedKeys,
-    -forEachSorted,
-    -reverseParams,
-    -nextUid,
-    -setHashKey,
-    -extend,
-    -int,
-    -inherit,
-    -noop,
-    -identity,
-    -valueFn,
-    -isUndefined,
-    -isDefined,
-    -isObject,
-    -isString,
-    -isNumber,
-    -isDate,
-    -isArray,
-    -isFunction,
-    -isRegExp,
-    -isWindow,
-    -isScope,
-    -isFile,
-    -isBlob,
-    -isBoolean,
-    -trim,
-    -isElement,
-    -makeMap,
-    -map,
-    -size,
-    -includes,
-    -indexOf,
-    -arrayRemove,
-    -isLeafNode,
-    -copy,
-    -shallowCopy,
-    -equals,
-    -csp,
-    -concat,
-    -sliceArgs,
-    -bind,
-    -toJsonReplacer,
-    -toJson,
-    -fromJson,
-    -toBoolean,
-    -startingTag,
-    -tryDecodeURIComponent,
-    -parseKeyValue,
-    -toKeyValue,
-    -encodeUriSegment,
-    -encodeUriQuery,
-    -angularInit,
-    -bootstrap,
-    -snake_case,
-    -bindJQuery,
-    -assertArg,
-    -assertArgFn,
-    -assertNotHasOwnProperty,
-    -getter,
-    -getBlockElements,
-    -hasOwnProperty,
-
-*/
-
-////////////////////////////////////
-
 /**
  * @ngdoc module
  * @name ng
@@ -186,24 +68,10 @@ function minErr(module) {
  * @name angular.lowercase
  * @module ng
  * @kind function
- *
- * @description Converts the specified string to lowercase.
- * @param {string} string String to be converted to lowercase.
- * @returns {string} Lowercased string.
  */
 var lowercase = function(string){return isString(string) ? string.toLowerCase() : string;};
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-/**
- * @ngdoc function
- * @name angular.uppercase
- * @module ng
- * @kind function
- *
- * @description Converts the specified string to uppercase.
- * @param {string} string String to be converted to uppercase.
- * @returns {string} Uppercased string.
- */
 var uppercase = function(string){return isString(string) ? string.toUpperCase() : string;};
 
 
@@ -245,22 +113,11 @@ var /** holds major version number for IE or NaN for real browsers */
     nodeName_,
     uid               = ['0', '0', '0'];
 
-/**
- * IE 11 changed the format of the UserAgent string.
- * See http://msdn.microsoft.com/en-us/library/ms537503.aspx
- */
 msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1]);
 if (isNaN(msie)) {
   msie = int((/trident\/.*; rv:(\d+)/.exec(lowercase(navigator.userAgent)) || [])[1]);
 }
 
-
-/**
- * @private
- * @param {*} obj
- * @return {boolean} Returns true if `obj` is an array or array-like object (NodeList, Arguments,
- *                   String ...)
- */
 function isArrayLike(obj) {
   if (obj == null || isWindow(obj)) {
     return false;
@@ -276,35 +133,6 @@ function isArrayLike(obj) {
          typeof length === 'number' && length > 0 && (length - 1) in obj;
 }
 
-/**
- * @ngdoc function
- * @name angular.forEach
- * @module ng
- * @kind function
- *
- * @description
- * Invokes the `iterator` function once for each item in `obj` collection, which can be either an
- * object or an array. The `iterator` function is invoked with `iterator(value, key)`, where `value`
- * is the value of an object property or an array element and `key` is the object property key or
- * array element index. Specifying a `context` for the function is optional.
- *
- * It is worth noting that `.forEach` does not iterate over inherited properties because it filters
- * using the `hasOwnProperty` method.
- *
-   ```js
-     var values = {name: 'misko', gender: 'male'};
-     var log = [];
-     angular.forEach(values, function(value, key) {
-       this.push(key + ': ' + value);
-     }, log);
-     expect(log).toEqual(['name: misko', 'gender: male']);
-   ```
- *
- * @param {Object|Array} obj Object to iterate over.
- * @param {Function} iterator Iterator function.
- * @param {Object=} context Object to become context (`this`) for the iterator function.
- * @returns {Object|Array} Reference to `obj`.
- */
 function forEach(obj, iterator, context) {
   var key;
   if (obj) {
@@ -390,12 +218,6 @@ function nextUid() {
   return uid.join('');
 }
 
-
-/**
- * Set or clear the hashkey for an object.
- * @param obj object
- * @param h the hashkey (!truthy to delete the hashkey)
- */
 function setHashKey(obj, h) {
   if (h) {
     obj.$$hashKey = h;
@@ -443,11 +265,6 @@ function inherit(parent, extra) {
 }
 
 /**
- * @ngdoc function
- * @name angular.noop
- * @module ng
- * @kind function
- *
  * @description
  * A function that performs no operations. This function can be useful when writing code in the
  * functional style.
@@ -463,11 +280,6 @@ noop.$inject = [];
 
 
 /**
- * @ngdoc function
- * @name angular.identity
- * @module ng
- * @kind function
- *
  * @description
  * A function that returns its first argument. This function is useful when writing code in the
  * functional style.
