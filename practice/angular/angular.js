@@ -296,111 +296,25 @@ identity.$inject = [];
 
 function valueFn(value) {return function() {return value;};}
 
-/**
- * @ngdoc function
- * @name angular.isUndefined
- * @module ng
- * @kind function
- *
- * @description
- * Determines if a reference is undefined.
- *
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is undefined.
- */
 function isUndefined(value){return typeof value === 'undefined';}
 
-
-/**
- * @ngdoc function
- * @name angular.isDefined
- * @module ng
- * @kind function
- *
- * @description
- * Determines if a reference is defined.
- *
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is defined.
- */
 function isDefined(value){return typeof value !== 'undefined';}
 
-
 /**
- * @ngdoc function
- * @name angular.isObject
- * @module ng
- * @kind function
- *
- * @description
  * Determines if a reference is an `Object`. Unlike `typeof` in JavaScript, `null`s are not
  * considered to be objects. Note that JavaScript arrays are objects.
- *
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is an `Object` but not `null`.
+
  */
 function isObject(value){return value != null && typeof value === 'object';}
 
-
-/**
- * @ngdoc function
- * @name angular.isString
- * @module ng
- * @kind function
- *
- * @description
- * Determines if a reference is a `String`.
- *
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is a `String`.
- */
 function isString(value){return typeof value === 'string';}
 
-
-/**
- * @ngdoc function
- * @name angular.isNumber
- * @module ng
- * @kind function
- *
- * @description
- * Determines if a reference is a `Number`.
- *
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is a `Number`.
- */
 function isNumber(value){return typeof value === 'number';}
 
-
-/**
- * @ngdoc function
- * @name angular.isDate
- * @module ng
- * @kind function
- *
- * @description
- * Determines if a value is a date.
- *
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is a `Date`.
- */
 function isDate(value) {
   return toString.call(value) === '[object Date]';
 }
 
-
-/**
- * @ngdoc function
- * @name angular.isArray
- * @module ng
- * @kind function
- *
- * @description
- * Determines if a reference is an `Array`.
- *
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is an `Array`.
- */
 var isArray = (function() {
   if (!isFunction(Array.isArray)) {
     return function(value) {
@@ -410,59 +324,27 @@ var isArray = (function() {
   return Array.isArray;
 })();
 
-/**
- * @ngdoc function
- * @name angular.isFunction
- * @module ng
- * @kind function
- *
- * @description
- * Determines if a reference is a `Function`.
- *
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is a `Function`.
- */
 function isFunction(value){return typeof value === 'function';}
 
-
-/**
- * Determines if a value is a regular expression object.
- *
- * @private
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is a `RegExp`.
- */
 function isRegExp(value) {
   return toString.call(value) === '[object RegExp]';
 }
 
-
-/**
- * Checks if `obj` is a window object.
- *
- * @private
- * @param {*} obj Object to check
- * @returns {boolean} True if `obj` is a window obj.
- */
 function isWindow(obj) {
   return obj && obj.document && obj.location && obj.alert && obj.setInterval;
 }
-
 
 function isScope(obj) {
   return obj && obj.$evalAsync && obj.$watch;
 }
 
-
 function isFile(obj) {
   return toString.call(obj) === '[object File]';
 }
 
-
 function isBlob(obj) {
   return toString.call(obj) === '[object Blob]';
 }
-
 
 function isBoolean(value) {
   return typeof value === 'boolean';
@@ -470,9 +352,6 @@ function isBoolean(value) {
 
 
 var trim = (function() {
-  // native trim is way faster: http://jsperf.com/angular-trim-test
-  // but IE doesn't have it... :-(
-  // TODO: we should move this into IE/ES5 polyfill
   if (!String.prototype.trim) {
     return function(value) {
       return isString(value) ? value.replace(/^\s\s*/, '').replace(/\s\s*$/, '') : value;
@@ -484,18 +363,7 @@ var trim = (function() {
 })();
 
 
-/**
- * @ngdoc function
- * @name angular.isElement
- * @module ng
- * @kind function
- *
- * @description
- * Determines if a reference is a DOM element (or wrapped jQuery element).
- *
- * @param {*} value Reference to check.
- * @returns {boolean} True if `value` is a DOM element (or wrapped jQuery element).
- */
+// Determines if a reference is a DOM element (or wrapped jQuery element).
 function isElement(node) {
   return !!(node &&
     (node.nodeName  // we are a direct element
@@ -513,7 +381,6 @@ function makeMap(str) {
   return obj;
 }
 
-
 if (msie < 9) {
   nodeName_ = function(element) {
     element = element.nodeName ? element : element[0];
@@ -526,7 +393,6 @@ if (msie < 9) {
   };
 }
 
-
 function map(obj, iterator, context) {
   var results = [];
   forEach(obj, function(value, index, list) {
@@ -534,7 +400,6 @@ function map(obj, iterator, context) {
   });
   return results;
 }
-
 
 /**
  * @description
@@ -558,10 +423,8 @@ function size(obj, ownPropsOnly) {
       if (!ownPropsOnly || obj.hasOwnProperty(key))
         count++;
   }
-
   return count;
 }
-
 
 function includes(array, obj) {
   return indexOf(array, obj) != -1;
@@ -596,12 +459,6 @@ function isLeafNode (node) {
 }
 
 /**
- * @ngdoc function
- * @name angular.copy
- * @module ng
- * @kind function
- *
- * @description
  * Creates a deep copy of `source`, which should be an object or an array.
  *
  * * If no destination is supplied, a copy of the object or array is created.
@@ -615,42 +472,6 @@ function isLeafNode (node) {
  * @param {(Object|Array)=} destination Destination into which the source is copied. If
  *     provided, must be of the same type as `source`.
  * @returns {*} The copy or updated `destination`, if `destination` was specified.
- *
- * @example
- <example>
- <file name="index.html">
- <div ng-controller="Controller">
- <form novalidate class="simple-form">
- Name: <input type="text" ng-model="user.name" /><br />
- E-mail: <input type="email" ng-model="user.email" /><br />
- Gender: <input type="radio" ng-model="user.gender" value="male" />male
- <input type="radio" ng-model="user.gender" value="female" />female<br />
- <button ng-click="reset()">RESET</button>
- <button ng-click="update(user)">SAVE</button>
- </form>
- <pre>form = {{user | json}}</pre>
- <pre>master = {{master | json}}</pre>
- </div>
-
- <script>
- function Controller($scope) {
-    $scope.master= {};
-
-    $scope.update = function(user) {
-      // Example with 1 argument
-      $scope.master= angular.copy(user);
-    };
-
-    $scope.reset = function() {
-      // Example with 2 arguments
-      angular.copy($scope.master, $scope.user);
-    };
-
-    $scope.reset();
-  }
- </script>
- </file>
- </example>
  */
 function copy(source, destination, stackSource, stackDest) {
   if (isWindow(source) || isScope(source)) {
@@ -712,7 +533,6 @@ function copy(source, destination, stackSource, stackDest) {
       }
       setHashKey(destination,h);
     }
-
   }
   return destination;
 }
@@ -736,23 +556,14 @@ function shallowCopy(src, dst) {
       }
     }
   }
-
   return dst || src;
 }
 
-
 /**
- * @ngdoc function
- * @name angular.equals
- * @module ng
- * @kind function
- *
- * @description
  * Determines if two objects or two values are equivalent. Supports value types, regular
  * expressions, arrays and objects.
  *
  * Two objects or values are considered equivalent if at least one of the following is true:
- *
  * * Both objects or values pass `===` comparison.
  * * Both objects or values are of the same type and all of their properties are equal by
  *   comparing them with `angular.equals`.
@@ -810,13 +621,11 @@ function equals(o1, o2) {
   return false;
 }
 
-
 function csp() {
   return (document.securityPolicy && document.securityPolicy.isActive) ||
       (document.querySelector &&
       !!(document.querySelector('[ng-csp]') || document.querySelector('[data-ng-csp]')));
 }
-
 
 function concat(array1, array2, index) {
   return array1.concat(slice.call(array2, index));
@@ -826,15 +635,8 @@ function sliceArgs(args, startIndex) {
   return slice.call(args, startIndex || 0);
 }
 
-
 /* jshint -W101 */
 /**
- * @ngdoc function
- * @name angular.bind
- * @module ng
- * @kind function
- *
- * @description
  * Returns a function which calls function `fn` bound to `self` (`self` becomes the `this` for
  * `fn`). You can supply optional `args` that are prebound to the function. This feature is also
  * known as [partial application](http://en.wikipedia.org/wiki/Partial_application), as
@@ -866,7 +668,6 @@ function bind(self, fn) {
   }
 }
 
-
 function toJsonReplacer(key, value) {
   var val = value;
 
@@ -879,18 +680,10 @@ function toJsonReplacer(key, value) {
   } else if (isScope(value)) {
     val = '$SCOPE';
   }
-
   return val;
 }
 
-
 /**
- * @ngdoc function
- * @name angular.toJson
- * @module ng
- * @kind function
- *
- * @description
  * Serializes input into a JSON-formatted string. Properties with leading $ characters will be
  * stripped since angular uses this notation internally.
  *
@@ -903,16 +696,7 @@ function toJson(obj, pretty) {
   return JSON.stringify(obj, toJsonReplacer, pretty ? '  ' : null);
 }
 
-
 /**
- * @ngdoc function
- * @name angular.fromJson
- * @module ng
- * @kind function
- *
- * @description
- * Deserializes a JSON string.
- *
  * @param {string} json JSON string to deserialize.
  * @returns {Object|Array|string|number} Deserialized thingy.
  */
@@ -921,7 +705,6 @@ function fromJson(json) {
       ? JSON.parse(json)
       : json;
 }
-
 
 function toBoolean(value) {
   if (typeof value === 'function') {
@@ -956,15 +739,10 @@ function startingTag(element) {
   } catch(e) {
     return lowercase(elemHtml);
   }
-
 }
-
-
-/////////////////////////////////////////////////
 
 /**
  * Tries to decode the URI component without throwing an exception.
- *
  * @private
  * @param str value potential URI component to check.
  * @returns {boolean} True if `value` can be decoded
@@ -977,7 +755,6 @@ function tryDecodeURIComponent(value) {
     // Ignore any invalid uri component
   }
 }
-
 
 /**
  * Parses an escaped url query string into key-value pairs.
@@ -1039,7 +816,6 @@ function encodeUriSegment(val) {
              replace(/%2B/gi, '+');
 }
 
-
 /**
  * This method is intended for encoding *key* or *value* parts of query component. We need a custom
  * method because encodeURIComponent is too aggressive and encodes stuff that doesn't have to be
@@ -1059,7 +835,6 @@ function encodeUriQuery(val, pctEncodeSpaces) {
              replace(/%2C/gi, ',').
              replace(/%20/g, (pctEncodeSpaces ? '%20' : '+'));
 }
-
 
 /**
  * @ngdoc directive
