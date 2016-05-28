@@ -2676,10 +2676,6 @@ function createInjector(modulesToLoad) {
 
   return instanceInjector;
 
-  ////////////////////////////////////
-  // $provider
-  ////////////////////////////////////
-
   function supportObject(delegate) {
     return function(key, value) {
       if (isObject(key)) {
@@ -2727,9 +2723,6 @@ function createInjector(modulesToLoad) {
     };
   }
 
-  ////////////////////////////////////
-  // Module Loading
-  ////////////////////////////////////
   function loadModules(modulesToLoad){
     var runBlocks = [], moduleFn, invokeQueue, i, ii;
     forEach(modulesToLoad, function(module) {
@@ -2772,10 +2765,6 @@ function createInjector(modulesToLoad) {
     });
     return runBlocks;
   }
-
-  ////////////////////////////////////
-  // internal Injector
-  ////////////////////////////////////
 
   function createInternalInjector(cache, factory) {
 
@@ -2862,8 +2851,7 @@ function createInjector(modulesToLoad) {
  * @requires $window
  * @requires $location
  * @requires $rootScope
- *
- * @description
+
  * When called, it checks current value of `$location.hash()` and scrolls to the related element,
  * according to rules specified in
  * [Html5 spec](http://dev.w3.org/html5/spec/Overview.html#the-indicated-part-of-the-document).
@@ -2918,7 +2906,7 @@ function $AnchorScrollProvider() {
     // helper function to get first anchor from a NodeList
     // can't use filter.filter, as it accepts only instances of Array
     // and IE can't convert NodeList to an array using [].slice
-    // TODO(vojta): use filter if we change it to accept lists as well
+
     function getFirstAnchor(list) {
       var result = null;
       forEach(list, function(element) {
@@ -2951,7 +2939,6 @@ function $AnchorScrollProvider() {
           $rootScope.$evalAsync(scroll);
         });
     }
-
     return scroll;
   }];
 }
@@ -2964,18 +2951,14 @@ var $animateMinErr = minErr('$animate');
  *
  * @description
  * Default implementation of $animate that doesn't perform any animations, instead just
- * synchronously performs DOM
- * updates and calls done() callbacks.
+ * synchronously performs DOM updates and calls done() callbacks.
  *
  * In order to enable animations the ngAnimate module has to be loaded.
- *
  * To see the functional implementation check out src/ngAnimate/animate.js
  */
 var $AnimateProvider = ['$provide', function($provide) {
 
-
   this.$$selectors = {};
-
 
   /**
    * @ngdoc method
@@ -2991,7 +2974,6 @@ var $AnimateProvider = ['$provide', function($provide) {
    *   animation service will use this function to cancel the animation whenever a cancel event is
    *   triggered.
    *
-   *
    * ```js
    *   return {
      *     eventFn : function(element, done) {
@@ -3003,7 +2985,6 @@ var $AnimateProvider = ['$provide', function($provide) {
      *     }
      *   }
    * ```
-   *
    * @param {string} name The name of the animation.
    * @param {Function} factory The factory function that will be executed to return the animation
    *                           object.
@@ -3061,7 +3042,6 @@ var $AnimateProvider = ['$provide', function($provide) {
      * page}.
      */
     return {
-
       /**
        *
        * @ngdoc method
@@ -3130,7 +3110,6 @@ var $AnimateProvider = ['$provide', function($provide) {
       },
 
       /**
-       *
        * @ngdoc method
        * @name $animate#addClass
        * @kind function
@@ -3153,10 +3132,6 @@ var $AnimateProvider = ['$provide', function($provide) {
       },
 
       /**
-       *
-       * @ngdoc method
-       * @name $animate#removeClass
-       * @kind function
        * @description Removes the provided className CSS class value from the provided element.
        * Once complete, the done() callback will be fired (if provided).
        * @param {DOMElement} element the element which will have the className value
@@ -3175,20 +3150,6 @@ var $AnimateProvider = ['$provide', function($provide) {
         async(done);
       },
 
-      /**
-       *
-       * @ngdoc method
-       * @name $animate#setClass
-       * @kind function
-       * @description Adds and/or removes the given CSS classes to and from the element.
-       * Once complete, the done() callback will be fired (if provided).
-       * @param {DOMElement} element the element which will have its CSS classes changed
-       *   removed from it
-       * @param {string} add the CSS classes which will be added to the element
-       * @param {string} remove the CSS class which will be removed from the element
-       * @param {Function=} done the callback function (if provided) that will be fired after the
-       *   CSS classes have been set on the element
-       */
       setClass : function(element, add, remove, done) {
         forEach(element, function (element) {
           jqLiteAddClass(element, add);
@@ -3214,8 +3175,6 @@ function $$AsyncCallbackProvider(){
 
 /**
  * ! This is a private undocumented service !
- *
- * @name $browser
  * @requires $log
  * @description
  * This object has two goals:
@@ -3248,7 +3207,6 @@ function Browser(window, document, $log, $sniffer) {
   var outstandingRequestCount = 0;
   var outstandingRequestCallbacks = [];
 
-  // TODO(vojta): remove this temporary api
   self.$$completeOutstandingRequest = completeOutstandingRequest;
   self.$$incOutstandingRequestCount = function() { outstandingRequestCount++; };
 
@@ -3276,7 +3234,6 @@ function Browser(window, document, $log, $sniffer) {
   /**
    * @private
    * Note: this method is used only by scenario runner
-   * TODO(vojta): prefix this method with $$ ?
    * @param {function()} callback Function that will be called when no outstanding request
    */
   self.notifyWhenNoOutstandingRequests = function(callback) {
@@ -3292,9 +3249,7 @@ function Browser(window, document, $log, $sniffer) {
     }
   };
 
-  //////////////////////////////////////////////////////////////
   // Poll Watcher API
-  //////////////////////////////////////////////////////////////
   var pollFns = [],
       pollTimeout;
 
@@ -3302,8 +3257,7 @@ function Browser(window, document, $log, $sniffer) {
    * @name $browser#addPollFn
    *
    * @param {function()} fn Poll function to add
-   *
-   * @description
+
    * Adds a function to the list of functions that poller periodically executes,
    * and starts polling if not started yet.
    *
@@ -3318,8 +3272,7 @@ function Browser(window, document, $log, $sniffer) {
   /**
    * @param {number} interval How often should browser call poll functions (ms)
    * @param {function()} setTimeout Reference to a real or fake `setTimeout` function.
-   *
-   * @description
+
    * Configures the poller to run in the specified intervals, using the specified
    * setTimeout fn and kicks it off.
    */
@@ -3330,18 +3283,13 @@ function Browser(window, document, $log, $sniffer) {
     })();
   }
 
-  //////////////////////////////////////////////////////////////
-  // URL API
-  //////////////////////////////////////////////////////////////
-
   var lastBrowserUrl = location.href,
       baseElement = document.find('base'),
       newLocation = null;
 
   /**
    * @name $browser#url
-   *
-   * @description
+
    * GETTER:
    * Without any argument, this method just returns current value of location.href.
    *
@@ -3406,8 +3354,7 @@ function Browser(window, document, $log, $sniffer) {
 
   /**
    * @name $browser#onUrlChange
-   *
-   * @description
+
    * Register callback function that will be called, when url changes.
    *
    * It's only called when the url is changed from outside of angular:
@@ -3426,7 +3373,7 @@ function Browser(window, document, $log, $sniffer) {
    * @return {function(string)} Returns the registered listener fn - handy if the fn is anonymous.
    */
   self.onUrlChange = function(callback) {
-    // TODO(vojta): refactor to use node's syntax for events
+
     if (!urlChangeInit) {
       // We listen on both (hashchange/popstate) when available, as some browsers (e.g. Opera)
       // don't fire popstate when user change the address bar and don't fire hashchange when url
@@ -3446,14 +3393,10 @@ function Browser(window, document, $log, $sniffer) {
     return callback;
   };
 
-  //////////////////////////////////////////////////////////////
   // Misc API
-  //////////////////////////////////////////////////////////////
-
   /**
    * @name $browser#baseHref
-   *
-   * @description
+
    * Returns current <base href>
    * (always relative - without domain)
    *
@@ -3464,9 +3407,7 @@ function Browser(window, document, $log, $sniffer) {
     return href ? href.replace(/^(https?\:)?\/\/[^\/]*/, '') : '';
   };
 
-  //////////////////////////////////////////////////////////////
   // Cookies API
-  //////////////////////////////////////////////////////////////
   var lastCookies = {};
   var lastCookieString = '';
   var cookiePath = self.baseHref();
@@ -3476,8 +3417,7 @@ function Browser(window, document, $log, $sniffer) {
    *
    * @param {string=} name Cookie name
    * @param {string=} value Cookie value
-   *
-   * @description
+
    * The cookies method provides a 'private' low level access to browser cookies.
    * It is not meant to be used directly, use the $cookie service instead.
    *
@@ -3545,8 +3485,7 @@ function Browser(window, document, $log, $sniffer) {
    * @param {function()} fn A function, who's execution should be deferred.
    * @param {number=} [delay=0] of milliseconds to defer the function execution.
    * @returns {*} DeferId that can be used to cancel the task via `$browser.defer.cancel()`.
-   *
-   * @description
+
    * Executes a fn asynchronously via `setTimeout(fn, delay)`.
    *
    * Unlike when calling `setTimeout` directly, in test this function is mocked and instead of using
@@ -3565,11 +3504,9 @@ function Browser(window, document, $log, $sniffer) {
     return timeoutId;
   };
 
-
   /**
    * @name $browser#defer.cancel
-   *
-   * @description
+
    * Cancels a deferred task identified with `deferId`.
    *
    * @param {*} deferId Token returned by the `$browser.defer` function.
@@ -3585,7 +3522,6 @@ function Browser(window, document, $log, $sniffer) {
     }
     return false;
   };
-
 }
 
 function $BrowserProvider(){
@@ -3598,8 +3534,7 @@ function $BrowserProvider(){
 /**
  * @ngdoc service
  * @name $cacheFactory
- *
- * @description
+
  * Factory that constructs {@link $cacheFactory.Cache Cache} objects and gives access to
  * them.
  *
@@ -3616,8 +3551,6 @@ function $BrowserProvider(){
  *  expect(cache.info()).toEqual({id: 'cacheId', size: 2});
  *
  * ```
- *
- *
  * @param {string} cacheId Name or id of the newly created cache.
  * @param {object=} options Options object that specifies the cache behavior. Properties:
  *
