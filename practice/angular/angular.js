@@ -16030,8 +16030,6 @@ var ngTranscludeDirective = ngDirective({
  * @ngdoc directive
  * @name script
  * @restrict E
- *
- * @description
  * Load the content of a `<script>` element into {@link ng.$templateCache `$templateCache`}, so that the
  * template can be used by {@link ng.directive:ngInclude `ngInclude`},
  * {@link ngRoute.directive:ngView `ngView`}, or {@link guide/directive directives}. The type of the
@@ -16227,16 +16225,13 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
           nullOption,
           unknownOption;
 
-
       self.databound = $attrs.ngModel;
-
 
       self.init = function(ngModelCtrl_, nullOption_, unknownOption_) {
         ngModelCtrl = ngModelCtrl_;
         nullOption = nullOption_;
         unknownOption = unknownOption_;
       };
-
 
       self.addOption = function(value) {
         assertNotHasOwnProperty(value, '"option value"');
@@ -16248,7 +16243,6 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
         }
       };
 
-
       self.removeOption = function(value) {
         if (this.hasOption(value)) {
           delete optionsMap[value];
@@ -16258,7 +16252,6 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
         }
       };
 
-
       self.renderUnknownOption = function(val) {
         var unknownVal = '? ' + hashKey(val) + ' ?';
         unknownOption.val(unknownVal);
@@ -16266,7 +16259,6 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
         $element.val(unknownVal);
         unknownOption.prop('selected', true); // needed for IE
       };
-
 
       self.hasOption = function(value) {
         return optionsMap.hasOwnProperty(value);
@@ -16314,11 +16306,6 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
       if (optionsExp) setupAsOptions(scope, element, ngModelCtrl);
       else if (multiple) setupAsMultiple(scope, element, ngModelCtrl);
       else setupAsSingle(scope, element, ngModelCtrl, selectCtrl);
-
-
-      ////////////////////////////
-
-
 
       function setupAsSingle(scope, selectElement, ngModelCtrl, selectCtrl) {
         ngModelCtrl.$render = function() {
