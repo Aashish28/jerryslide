@@ -3628,8 +3628,6 @@ function $CacheFactoryProvider() {
       /**
        * @ngdoc type
        * @name $cacheFactory.Cache
-       *
-       * @description
        * A cache object used to store and retrieve data, primarily used by
        * {@link $http $http} and the {@link ng.directive:script script} directive to cache
        * templates and other data.
@@ -3670,8 +3668,6 @@ function $CacheFactoryProvider() {
          * @ngdoc method
          * @name $cacheFactory.Cache#put
          * @kind function
-         *
-         * @description
          * Inserts a named entry into the {@link $cacheFactory.Cache Cache} object to be
          * retrieved later, and incrementing the size of the cache if the key was not already
          * present in the cache. If behaving like an LRU cache, it will also remove stale
@@ -3698,18 +3694,11 @@ function $CacheFactoryProvider() {
           if (size > capacity) {
             this.remove(staleEnd.key);
           }
-
           return value;
         },
 
         /**
-         * @ngdoc method
-         * @name $cacheFactory.Cache#get
-         * @kind function
-         *
-         * @description
          * Retrieves named data stored in the {@link $cacheFactory.Cache Cache} object.
-         *
          * @param {string} key the key of the data to be retrieved
          * @returns {*} the value stored.
          */
@@ -3725,17 +3714,6 @@ function $CacheFactoryProvider() {
           return data[key];
         },
 
-
-        /**
-         * @ngdoc method
-         * @name $cacheFactory.Cache#remove
-         * @kind function
-         *
-         * @description
-         * Removes an entry from the {@link $cacheFactory.Cache Cache} object.
-         *
-         * @param {string} key the key of the entry to be removed
-         */
         remove: function(key) {
           if (capacity < Number.MAX_VALUE) {
             var lruEntry = lruHash[key];
@@ -3753,15 +3731,6 @@ function $CacheFactoryProvider() {
           size--;
         },
 
-
-        /**
-         * @ngdoc method
-         * @name $cacheFactory.Cache#removeAll
-         * @kind function
-         *
-         * @description
-         * Clears the cache object of any entries.
-         */
         removeAll: function() {
           data = {};
           size = 0;
@@ -3769,13 +3738,7 @@ function $CacheFactoryProvider() {
           freshEnd = staleEnd = null;
         },
 
-
         /**
-         * @ngdoc method
-         * @name $cacheFactory.Cache#destroy
-         * @kind function
-         *
-         * @description
          * Destroys the {@link $cacheFactory.Cache Cache} object entirely,
          * removing it from the {@link $cacheFactory $cacheFactory} set.
          */
@@ -3786,13 +3749,10 @@ function $CacheFactoryProvider() {
           delete caches[cacheId];
         },
 
-
         /**
          * @ngdoc method
          * @name $cacheFactory.Cache#info
-         * @kind function
-         *
-         * @description
+
          * Retrieve information regarding a particular {@link $cacheFactory.Cache Cache}.
          *
          * @returns {object} an object with the following properties:
@@ -3808,10 +3768,8 @@ function $CacheFactoryProvider() {
         }
       };
 
+      // makes the `entry` the freshEnd of the LRU linked list
 
-      /**
-       * makes the `entry` the freshEnd of the LRU linked list
-       */
       function refresh(entry) {
         if (entry != freshEnd) {
           if (!staleEnd) {
@@ -3827,10 +3785,7 @@ function $CacheFactoryProvider() {
         }
       }
 
-
-      /**
-       * bidirectionally links two entries of the LRU linked list
-       */
+      // bidirectionally links two entries of the LRU linked list
       function link(nextEntry, prevEntry) {
         if (nextEntry != prevEntry) {
           if (nextEntry) nextEntry.p = prevEntry; //p stands for previous, 'prev' didn't minify
@@ -3839,13 +3794,8 @@ function $CacheFactoryProvider() {
       }
     }
 
-
   /**
-   * @ngdoc method
-   * @name $cacheFactory#info
-   *
-   * @description
-   * Get information about all the caches that have been created
+   Get information about all the caches that have been created
    *
    * @returns {Object} - key-value map of `cacheId` to the result of calling `cache#info`
    */
@@ -3857,13 +3807,10 @@ function $CacheFactoryProvider() {
       return info;
     };
 
-
   /**
    * @ngdoc method
    * @name $cacheFactory#get
-   *
-   * @description
-   * Get access to a cache object by the `cacheId` used when it was created.
+     Get access to a cache object by the `cacheId` used when it was created.
    *
    * @param {string} cacheId Name or id of a cache to access.
    * @returns {object} Cache object identified by the cacheId or undefined if no such cache.
@@ -3871,7 +3818,6 @@ function $CacheFactoryProvider() {
     cacheFactory.get = function(cacheId) {
       return caches[cacheId];
     };
-
 
     return cacheFactory;
   };
@@ -3933,7 +3879,6 @@ function $TemplateCacheProvider() {
  * - "element" - DOM Element or Node
  * - "$node" or "$element" - jqLite-wrapped node or element
  *
- *
  * Compiler related stuff:
  *
  * - "linkFn" - linking fn of a single directive
@@ -3942,13 +3887,9 @@ function $TemplateCacheProvider() {
  * - "compositeLinkFn" - function that aggregates all linking fns for a compilation root (nodeList)
  */
 
-
 /**
  * @ngdoc service
  * @name $compile
- * @kind function
- *
- * @description
  * Compiles an HTML string or DOM into a template and produces a template function, which
  * can then be used to link {@link ng.$rootScope.Scope `scope`} and the template together.
  *
@@ -4028,9 +3969,6 @@ function $TemplateCacheProvider() {
  *     // return function postLink(scope, iElement, iAttrs) { ... }
  *   });
  * ```
- *
- *
- *
  * ### Directive Definition Object
  *
  * The directive definition object provides instructions to the {@link ng.$compile
@@ -4091,8 +4029,6 @@ function $TemplateCacheProvider() {
  *   done by passing a map of local variable names and values into the expression wrapper fn.
  *   For example, if the expression is `increment(amount)` then we can specify the amount value
  *   by calling the `localFn` as `localFn({amount: 22})`.
- *
- *
  *
  * #### `controller`
  * Controller constructor function. The controller is instantiated before the
@@ -4421,13 +4357,6 @@ function $TemplateCacheProvider() {
 
 var $compileMinErr = minErr('$compile');
 
-/**
- * @ngdoc provider
- * @name $compileProvider
- * @kind function
- *
- * @description
- */
 $CompileProvider.$inject = ['$provide', '$$sanitizeUriProvider'];
 function $CompileProvider($provide, $$sanitizeUriProvider) {
   var hasDirectives = {},
@@ -4444,8 +4373,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
    * @ngdoc method
    * @name $compileProvider#directive
    * @kind function
-   *
-   * @description
    * Register a new directive with the compiler.
    *
    * @param {string|Object} name Name of the directive in camel-case (i.e. <code>ngBind</code> which
@@ -4497,8 +4424,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
    * @ngdoc method
    * @name $compileProvider#aHrefSanitizationWhitelist
    * @kind function
-   *
-   * @description
    * Retrieves or overrides the default regular expression that is used for whitelisting of safe
    * urls during a[href] sanitization.
    *
@@ -4521,7 +4446,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       return $$sanitizeUriProvider.aHrefSanitizationWhitelist();
     }
   };
-
 
   /**
    * @ngdoc method
@@ -4566,17 +4490,11 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
     Attributes.prototype = {
       $normalize: directiveNormalize,
 
-
       /**
        * @ngdoc method
        * @name $compile.directive.Attributes#$addClass
-       * @kind function
-       *
-       * @description
        * Adds the CSS class value specified by the classVal parameter to the element. If animations
        * are enabled then an animation will be triggered for the class addition.
-       *
-       * @param {string} classVal The className value that will be added to the element
        */
       $addClass : function(classVal) {
         if(classVal && classVal.length > 0) {
@@ -4584,17 +4502,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         }
       },
 
-      /**
-       * @ngdoc method
-       * @name $compile.directive.Attributes#$removeClass
-       * @kind function
-       *
-       * @description
-       * Removes the CSS class value specified by the classVal parameter from the element. If
-       * animations are enabled then an animation will be triggered for the class removal.
-       *
-       * @param {string} classVal The className value that will be removed from the element
-       */
       $removeClass : function(classVal) {
         if(classVal && classVal.length > 0) {
           $animate.removeClass(this.$$element, classVal);
@@ -4604,9 +4511,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       /**
        * @ngdoc method
        * @name $compile.directive.Attributes#$updateClass
-       * @kind function
-       *
-       * @description
        * Adds and removes the appropriate CSS class values to the element based on the difference
        * between the new and old CSS class values (specified as newClasses and oldClasses).
        *
@@ -4636,10 +4540,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
        * @param {string=} attrName Optional none normalized name. Defaults to key.
        */
       $set: function(key, value, writeAttr, attrName) {
-        // TODO: decide whether or not to throw an error if "class"
-        //is set through this function since it may cause $updateClass to
-        //become unstable.
-
         var booleanKey = getBooleanAttrName(this.$$element[0], key),
             normalizedVal,
             nodeName;
@@ -4660,10 +4560,9 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             this.$attr[key] = attrName = snake_case(key, '-');
           }
         }
-
         nodeName = nodeName_(this.$$element);
 
-        // sanitize a[href] and img[src] values
+        // sanitize - make clean a[href] and img[src] values
         if ((nodeName === 'A' && key === 'href') ||
             (nodeName === 'IMG' && key === 'src')) {
           this[key] = value = $$sanitizeUri(value, key === 'src');
@@ -4688,13 +4587,11 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         });
       },
 
-
       /**
        * @ngdoc method
        * @name $compile.directive.Attributes#$observe
        * @kind function
-       *
-       * @description
+
        * Observes an interpolated attribute.
        *
        * The observer function will be invoked once during the next `$digest` following
@@ -4732,10 +4629,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         },
         NG_ATTR_BINDING = /^ngAttr[A-Z]/;
 
-
     return compile;
-
-    //================================
 
     function compile($compileNodes, transcludeFn, maxPriority, ignoreDirective,
                         previousCompileContext) {
@@ -4881,7 +4775,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             } else {
               childBoundTranscludeFn = null;
             }
-
             nodeLinkFn(childLinkFn, childScope, node, $rootElement, childBoundTranscludeFn);
 
           } else if (childLinkFn) {
@@ -4915,7 +4808,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
     /**
      * Looks for directives on the given node and adds them to the directive collection which is
      * sorted.
-     *
      * @param node Node to search.
      * @param directives An array to which the directives are added to. This array is sorted before
      *        the function returns.
@@ -4948,14 +4840,12 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               if (NG_ATTR_BINDING.test(ngAttrName)) {
                 name = snake_case(ngAttrName.substr(6), '-');
               }
-
               var directiveNName = ngAttrName.replace(/(Start|End)$/, '');
               if (ngAttrName === directiveNName + 'Start') {
                 attrStartName = name;
                 attrEndName = name.substr(0, name.length - 5) + 'end';
                 name = name.substr(0, name.length - 6);
               }
-
               nName = directiveNormalize(name.toLowerCase());
               attrsMap[nName] = name;
               attrs[nName] = value = trim(attr.value);
@@ -4967,7 +4857,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
                             attrEndName);
             }
           }
-
           // use class as directive
           className = node.className;
           if (isString(className) && className !== '') {
@@ -4999,7 +4888,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           }
           break;
       }
-
       directives.sort(byPriority);
       return directives;
     }
@@ -5033,7 +4921,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       } else {
         nodes.push(node);
       }
-
       return jqLite(nodes);
     }
 
@@ -5051,7 +4938,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         return linkFn(scope, element, attrs, controllers, transcludeFn);
       };
     }
-
     /**
      * Once the directives have been collected, their compile functions are executed. This method
      * is responsible for inlining directive templates as well as terminating the application
@@ -5127,7 +5013,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             }
           }
         }
-
         directiveName = directive.name;
 
         if (!directive.templateUrl && directive.controller) {
@@ -5137,7 +5022,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               controllerDirectives[directiveName], directive, $compileNode);
           controllerDirectives[directiveName] = directive;
         }
-
         if (directiveValue = directive.transclude) {
           hasTranscludeDirective = true;
 
@@ -5176,7 +5060,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             childTranscludeFn = compile($template, transcludeFn);
           }
         }
-
         if (directive.template) {
           hasTemplate = true;
           assertNoDuplicate('template', templateDirective, directive, $compileNode);
@@ -5226,7 +5109,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             $compileNode.html(directiveValue);
           }
         }
-
         if (directive.templateUrl) {
           hasTemplate = true;
           assertNoDuplicate('template', templateDirective, directive, $compileNode);
@@ -5256,12 +5138,10 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             $exceptionHandler(e, startingTag($compileNode));
           }
         }
-
         if (directive.terminal) {
           nodeLinkFn.terminal = true;
           terminalPriority = Math.max(terminalPriority, directive.priority);
         }
-
       }
 
       nodeLinkFn.scope = newScopeDirective && newScopeDirective.scope === true;
@@ -5273,8 +5153,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
 
       // might be normal or delayed nodeLinkFn depending on if templateUrl is present
       return nodeLinkFn;
-
-      ////////////////////
 
       function addLinkFns(pre, post, attrStart, attrEnd) {
         if (pre) {
@@ -5296,7 +5174,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           postLinkFns.push(post);
         }
       }
-
 
       function getControllers(directiveName, require, $element, elementControllers) {
         var value, retrievalMethod = 'data', optional = false;
@@ -5353,8 +5230,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           } else {
             $linkNode.data('$isolateScopeNoTemplate', isolateScope);
           }
-
-
 
           safeAddClass($linkNode, 'ng-isolate-scope');
 
@@ -5462,7 +5337,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             }
           });
         }
-
         // PRELINKING
         for(i = 0, ii = preLinkFns.length; i < ii; i++) {
           try {
@@ -5493,7 +5367,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             $exceptionHandler(e, startingTag($element));
           }
         }
-
         // This is the function that is injected as `$transclude`.
         function controllersBoundTransclude(scope, cloneAttachFn) {
           var transcludeControllers;
@@ -5557,7 +5430,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       return match;
     }
 
-
     /**
      * When the element is replaced with HTML template then the new attributes
      * on the template need to be merged with the existing attributes in the DOM.
@@ -5598,7 +5470,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         }
       });
     }
-
 
     function compileTemplateUrl(directives, $compileNode, tAttrs,
         $rootElement, childTranscludeFn, preLinkFns, postLinkFns, previousCompileContext) {
@@ -5650,7 +5521,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             compileNode = beforeTemplateCompileNode;
             $compileNode.html(content);
           }
-
           directives.unshift(derivedSyncDirective);
 
           afterTemplateNodeLinkFn = applyDirectivesToNode(directives, compileNode, tAttrs,
@@ -5678,7 +5548,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
                 // it was cloned therefore we have to clone as well.
                 linkNode = jqLiteClone(compileNode);
               }
-
               replaceWith(linkRootElement, jqLite(beforeTemplateLinkNode), linkNode);
 
               // Copy in CSS classes from original node
@@ -5714,7 +5583,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       };
     }
 
-
     /**
      * Sorting function for bound directives.
      */
@@ -5725,14 +5593,12 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       return a.index - b.index;
     }
 
-
     function assertNoDuplicate(what, previousDirective, directive, element) {
       if (previousDirective) {
         throw $compileMinErr('multidir', 'Multiple directives [{0}, {1}] asking for {2} on: {3}',
             previousDirective.name, directive.name, what, startingTag(element));
       }
     }
-
 
       function addTextInterpolateDirective(directives, text) {
         var interpolateFn = $interpolate(text, true);
@@ -5760,7 +5626,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         }
       }
 
-
     function getTrustedContext(node, attrNormalizedName) {
       if (attrNormalizedName == "srcdoc") {
         return $sce.HTML;
@@ -5775,20 +5640,17 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       }
     }
 
-
     function addAttrInterpolateDirective(node, directives, value, name) {
       var interpolateFn = $interpolate(value, true);
 
       // no interpolation found -> ignore
       if (!interpolateFn) return;
 
-
       if (name === "multiple" && nodeName_(node) === "SELECT") {
         throw $compileMinErr("selmulti",
             "Binding to the 'multiple' attribute is not supported. Element: {0}",
             startingTag(node));
       }
-
       directives.push({
         priority: 100,
         compile: function() {
@@ -5801,7 +5663,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
                       "Interpolations for HTML DOM event attributes are disallowed.  Please use the " +
                           "ng- versions (such as ng-click instead of onclick) instead.");
                 }
-
                 // we need to interpolate again, in case the attribute value has been updated
                 // (e.g. by another directive's compile function)
                 interpolateFn = $interpolate(attr[name], true, getTrustedContext(node, name));
@@ -5833,7 +5694,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           }
       });
     }
-
 
     /**
      * This is a special jqLite.replaceWith, which can replace items which
@@ -5869,7 +5729,6 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           }
         }
       }
-
       if (parent) {
         parent.replaceChild(newNode, firstElementToRemove);
       }
@@ -5882,11 +5741,9 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         fragment.appendChild(element);
         delete elementsToRemove[k];
       }
-
       elementsToRemove[0] = newNode;
       elementsToRemove.length = 1;
     }
-
 
     function cloneAndAnnotateFn(fn, annotation) {
       return extend(function() { return fn.apply(null, arguments); }, fn, annotation);
@@ -5923,15 +5780,12 @@ function directiveNormalize(name) {
  *    <span ng:bind="a" ng-bind="a" data-ng-bind="a" x-ng-bind="a">
  * ```
  */
-
 /**
  * @ngdoc property
  * @name $compile.directive.Attributes#$attr
  * @returns {object} A map of DOM element attribute names to the normalized name. This is
  *                   needed to do reverse lookup from normalized name back to actual name.
  */
-
-
 /**
  * @ngdoc method
  * @name $compile.directive.Attributes#$set
@@ -5946,8 +5800,6 @@ function directiveNormalize(name) {
  *          property to the original name.
  * @param {string} value Value to set the attribute to. The value can be an interpolated string.
  */
-
-
 
 /**
  * Closure compiler type information
@@ -5998,7 +5850,6 @@ function $ControllerProvider() {
   var controllers = {},
       CNTRL_REG = /^(\S+)(\s+as\s+(\w+))?$/;
 
-
   /**
    * @ngdoc method
    * @name $controllerProvider#register
@@ -6015,7 +5866,6 @@ function $ControllerProvider() {
       controllers[name] = constructor;
     }
   };
-
 
   this.$get = ['$injector', '$window', function($injector, $window) {
 
@@ -6066,7 +5916,6 @@ function $ControllerProvider() {
 
         locals.$scope[identifier] = instance;
       }
-
       return instance;
     };
   }];
@@ -6106,8 +5955,6 @@ function $DocumentProvider(){
  * @ngdoc service
  * @name $exceptionHandler
  * @requires ng.$log
- *
- * @description
  * Any uncaught exception in angular expressions is delegated to this service.
  * The default implementation simply delegates to `$log.error` which logs it into
  * the browser console.
@@ -6125,7 +5972,6 @@ function $DocumentProvider(){
  *     };
  *   });
  * ```
- *
  * This example will override the normal action of `$exceptionHandler`, to make angular
  * exceptions fail hard when they happen, instead of just logging to the console.
  *
@@ -6144,7 +5990,6 @@ function $ExceptionHandlerProvider() {
 
 /**
  * Parse headers into key value object
- *
  * @param {string} headers Raw headers as a string
  * @returns {Object} Parsed headers as key value object
  */
@@ -6170,10 +6015,8 @@ function parseHeaders(headers) {
   return parsed;
 }
 
-
 /**
  * Returns a function that provides access to parsed headers.
- *
  * Headers are lazy parsed when first requested.
  * @see parseHeaders
  *
@@ -6192,11 +6035,9 @@ function headersGetter(headers) {
     if (name) {
       return headersObj[lowercase(name)] || null;
     }
-
     return headersObj;
   };
 }
-
 
 /**
  * Chain all given functions
@@ -6215,15 +6056,12 @@ function transformData(data, headers, fns) {
   forEach(fns, function(fn) {
     data = fn(data, headers);
   });
-
   return data;
 }
-
 
 function isSuccess(status) {
   return 200 <= status && status < 300;
 }
-
 
 function $HttpProvider() {
   var JSON_START = /^\s*(\[|\{[^\{])/,
