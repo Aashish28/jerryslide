@@ -14194,105 +14194,11 @@ var VALID_CLASS = 'ng-valid',
  * @property {boolean} $valid True if there is no error.
  * @property {boolean} $invalid True if at least one error on the control.
  *
- * @description
- *
  * `NgModelController` provides API for the `ng-model` directive. The controller contains
  * services for data-binding, validation, CSS updates, and value formatting and parsing. It
  * purposefully does not contain any logic which deals with DOM rendering or listening to
  * DOM events. Such DOM related logic should be provided by other directives which make use of
  * `NgModelController` for data-binding.
- *
- * ## Custom Control Example
- * This example shows how to use `NgModelController` with a custom control to achieve
- * data-binding. Notice how different directives (`contenteditable`, `ng-model`, and `required`)
- * collaborate together to achieve the desired result.
- *
- * Note that `contenteditable` is an HTML5 attribute, which tells the browser to let the element
- * contents be edited in place by the user.  This will not work on older browsers.
- *
- * We are using the {@link ng.service:$sce $sce} service here and include the {@link ngSanitize $sanitize}
- * module to automatically remove "bad" content like inline event listener (e.g. `<span onclick="...">`).
- * However, as we are using `$sce` the model can still decide to to provide unsafe content if it marks
- * that content using the `$sce` service.
- *
- * <example name="NgModelController" module="customControl" deps="angular-sanitize.js">
-    <file name="style.css">
-      [contenteditable] {
-        border: 1px solid black;
-        background-color: white;
-        min-height: 20px;
-      }
-
-      .ng-invalid {
-        border: 1px solid red;
-      }
-
-    </file>
-    <file name="script.js">
-      angular.module('customControl', ['ngSanitize']).
-        directive('contenteditable', ['$sce', function($sce) {
-          return {
-            restrict: 'A', // only activate on element attribute
-            require: '?ngModel', // get a hold of NgModelController
-            link: function(scope, element, attrs, ngModel) {
-              if(!ngModel) return; // do nothing if no ng-model
-
-              // Specify how UI should be updated
-              ngModel.$render = function() {
-                element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
-              };
-
-              // Listen for change events to enable binding
-              element.on('blur keyup change', function() {
-                scope.$apply(read);
-              });
-              read(); // initialize
-
-              // Write data to the model
-              function read() {
-                var html = element.html();
-                // When we clear the content editable the browser leaves a <br> behind
-                // If strip-br attribute is provided then we strip this out
-                if( attrs.stripBr && html == '<br>' ) {
-                  html = '';
-                }
-                ngModel.$setViewValue(html);
-              }
-            }
-          };
-        }]);
-    </file>
-    <file name="index.html">
-      <form name="myForm">
-       <div contenteditable
-            name="myWidget" ng-model="userContent"
-            strip-br="true"
-            required>Change me!</div>
-        <span ng-show="myForm.myWidget.$error.required">Required!</span>
-       <hr>
-       <textarea ng-model="userContent"></textarea>
-      </form>
-    </file>
-    <file name="protractor.js" type="protractor">
-    it('should data-bind and become invalid', function() {
-      if (browser.params.browser == 'safari' || browser.params.browser == 'firefox') {
-        // SafariDriver can't handle contenteditable
-        // and Firefox driver can't clear contenteditables very well
-        return;
-      }
-      var contentEditable = element(by.css('[contenteditable]'));
-      var content = 'Change me!';
-
-      expect(contentEditable.getText()).toEqual(content);
-
-      contentEditable.clear();
-      contentEditable.sendKeys(protractor.Key.BACK_SPACE);
-      expect(contentEditable.getText()).toEqual('');
-      expect(contentEditable.getAttribute('class')).toMatch(/ng-invalid-required/);
-    });
-    </file>
- * </example>
- *
  *
  */
 var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$parse', '$animate',
@@ -14319,8 +14225,6 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
   /**
    * @ngdoc method
    * @name ngModel.NgModelController#$render
-   *
-   * @description
    * Called when the view needs to be updated. It is expected that the user of the ng-model
    * directive will implement this method.
    */
@@ -14329,8 +14233,6 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
   /**
    * @ngdoc method
    * @name ngModel.NgModelController#$isEmpty
-   *
-   * @description
    * This is called when we need to determine if the value of the input is empty.
    *
    * For instance, the required directive does this to work out if the input has data or not.
@@ -14366,8 +14268,6 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
   /**
    * @ngdoc method
    * @name ngModel.NgModelController#$setValidity
-   *
-   * @description
    * Change the validity state, and notifies the form when the control changes validity. (i.e. it
    * does not notify form if given validator is already marked as invalid).
    *
@@ -14409,8 +14309,6 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
   /**
    * @ngdoc method
    * @name ngModel.NgModelController#$setPristine
-   *
-   * @description
    * Sets the control to its pristine state.
    *
    * This method can be called to remove the 'ng-dirty' class and set the control to its pristine
@@ -14426,8 +14324,6 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
   /**
    * @ngdoc method
    * @name ngModel.NgModelController#$setViewValue
-   *
-   * @description
    * Update the view value.
    *
    * This method should be called when the view value changes, typically from within a DOM event handler.
@@ -14495,7 +14391,6 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
         ctrl.$render();
       }
     }
-
     return value;
   });
 }];
@@ -14506,8 +14401,6 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
  * @name ngModel
  *
  * @element input
- *
- * @description
  * The `ngModel` directive binds an `input`,`select`, `textarea` (or custom form control) to a
  * property on the scope using {@link ngModel.NgModelController NgModelController},
  * which is created and exposed by this directive.
@@ -14526,7 +14419,6 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
  * implicitly and added to the scope.
  *
  * For best practices on using `ngModel`, see:
- *
  *  - [https://github.com/angular/angular.js/wiki/Understanding-Scopes]
  *
  * For basic examples, how to use `ngModel`, see:
@@ -14622,12 +14514,9 @@ var ngModelDirective = function() {
   };
 };
 
-
 /**
  * @ngdoc directive
  * @name ngChange
- *
- * @description
  * Evaluate the given expression when the user changes the input.
  * The expression is evaluated immediately, unlike the JavaScript onchange event
  * which only triggers at the end of a change (usually, when the user leaves the
@@ -14690,7 +14579,6 @@ var ngChangeDirective = valueFn({
   }
 });
 
-
 var requiredDirective = function() {
   return {
     require: '?ngModel',
@@ -14718,12 +14606,9 @@ var requiredDirective = function() {
   };
 };
 
-
 /**
  * @ngdoc directive
  * @name ngList
- *
- * @description
  * Text input that converts between a delimited string and an array of strings. The delimiter
  * can be a fixed string (by default a comma) or a regular expression.
  *
@@ -14817,8 +14702,6 @@ var CONSTANT_VALUE_REGEXP = /^(true|false|\d+)$/;
 /**
  * @ngdoc directive
  * @name ngValue
- *
- * @description
  * Binds the given expression to the value of `input[select]` or `input[radio]`, so
  * that when the element is selected, the `ngModel` of that element is set to the
  * bound value.
@@ -14888,8 +14771,6 @@ var ngValueDirective = function() {
  * @ngdoc directive
  * @name ngBind
  * @restrict AC
- *
- * @description
  * The `ngBind` attribute tells Angular to replace the text content of the specified HTML element
  * with the value of a given expression, and to update the text content when the value of that
  * expression changes.
@@ -14903,8 +14784,6 @@ var ngValueDirective = function() {
  *
  * An alternative solution to this problem would be using the
  * {@link ng.directive:ngCloak ngCloak} directive.
- *
- *
  * @element ANY
  * @param {expression} ngBind {@link guide/expression Expression} to evaluate.
  *
@@ -14953,8 +14832,6 @@ var ngBindDirective = ngDirective({
 /**
  * @ngdoc directive
  * @name ngBindTemplate
- *
- * @description
  * The `ngBindTemplate` directive specifies that the element
  * text content should be replaced with the interpolation of the template
  * in the `ngBindTemplate` attribute.
@@ -15011,12 +14888,9 @@ var ngBindTemplateDirective = ['$interpolate', function($interpolate) {
   };
 }];
 
-
 /**
  * @ngdoc directive
  * @name ngBindHtml
- *
- * @description
  * Creates a binding that will innerHTML the result of evaluating the `expression` into the current
  * element in a secure way.  By default, the innerHTML-ed content will be sanitized using the {@link
  * ngSanitize.$sanitize $sanitize} service.  To utilize this functionality, ensure that `$sanitize`
@@ -15187,150 +15061,6 @@ function classDirective(name, selector) {
   }];
 }
 
-/**
- * @ngdoc directive
- * @name ngClass
- * @restrict AC
- *
- * @description
- * The `ngClass` directive allows you to dynamically set CSS classes on an HTML element by databinding
- * an expression that represents all classes to be added.
- *
- * The directive operates in three different ways, depending on which of three types the expression
- * evaluates to:
- *
- * 1. If the expression evaluates to a string, the string should be one or more space-delimited class
- * names.
- *
- * 2. If the expression evaluates to an array, each element of the array should be a string that is
- * one or more space-delimited class names.
- *
- * 3. If the expression evaluates to an object, then for each key-value pair of the
- * object with a truthy value the corresponding key is used as a class name.
- *
- * The directive won't add duplicate classes if a particular class was already set.
- *
- * When the expression changes, the previously added classes are removed and only then the
- * new classes are added.
- *
- * @animations
- * add - happens just before the class is applied to the element
- * remove - happens just before the class is removed from the element
- *
- * @element ANY
- * @param {expression} ngClass {@link guide/expression Expression} to eval. The result
- *   of the evaluation can be a string representing space delimited class
- *   names, an array, or a map of class names to boolean values. In the case of a map, the
- *   names of the properties whose values are truthy will be added as css classes to the
- *   element.
- *
- * @example Example that demonstrates basic bindings via ngClass directive.
-   <example>
-     <file name="index.html">
-       <p ng-class="{strike: deleted, bold: important, red: error}">Map Syntax Example</p>
-       <input type="checkbox" ng-model="deleted"> deleted (apply "strike" class)<br>
-       <input type="checkbox" ng-model="important"> important (apply "bold" class)<br>
-       <input type="checkbox" ng-model="error"> error (apply "red" class)
-       <hr>
-       <p ng-class="style">Using String Syntax</p>
-       <input type="text" ng-model="style" placeholder="Type: bold strike red">
-       <hr>
-       <p ng-class="[style1, style2, style3]">Using Array Syntax</p>
-       <input ng-model="style1" placeholder="Type: bold, strike or red"><br>
-       <input ng-model="style2" placeholder="Type: bold, strike or red"><br>
-       <input ng-model="style3" placeholder="Type: bold, strike or red"><br>
-     </file>
-     <file name="style.css">
-       .strike {
-         text-decoration: line-through;
-       }
-       .bold {
-           font-weight: bold;
-       }
-       .red {
-           color: red;
-       }
-     </file>
-     <file name="protractor.js" type="protractor">
-       var ps = element.all(by.css('p'));
-
-       it('should let you toggle the class', function() {
-
-         expect(ps.first().getAttribute('class')).not.toMatch(/bold/);
-         expect(ps.first().getAttribute('class')).not.toMatch(/red/);
-
-         element(by.model('important')).click();
-         expect(ps.first().getAttribute('class')).toMatch(/bold/);
-
-         element(by.model('error')).click();
-         expect(ps.first().getAttribute('class')).toMatch(/red/);
-       });
-
-       it('should let you toggle string example', function() {
-         expect(ps.get(1).getAttribute('class')).toBe('');
-         element(by.model('style')).clear();
-         element(by.model('style')).sendKeys('red');
-         expect(ps.get(1).getAttribute('class')).toBe('red');
-       });
-
-       it('array example should have 3 classes', function() {
-         expect(ps.last().getAttribute('class')).toBe('');
-         element(by.model('style1')).sendKeys('bold');
-         element(by.model('style2')).sendKeys('strike');
-         element(by.model('style3')).sendKeys('red');
-         expect(ps.last().getAttribute('class')).toBe('bold strike red');
-       });
-     </file>
-   </example>
-
-   ## Animations
-
-   The example below demonstrates how to perform animations using ngClass.
-
-   <example module="ngAnimate" deps="angular-animate.js" animations="true">
-     <file name="index.html">
-      <input id="setbtn" type="button" value="set" ng-click="myVar='my-class'">
-      <input id="clearbtn" type="button" value="clear" ng-click="myVar=''">
-      <br>
-      <span class="base-class" ng-class="myVar">Sample Text</span>
-     </file>
-     <file name="style.css">
-       .base-class {
-         -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-         transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-       }
-
-       .base-class.my-class {
-         color: red;
-         font-size:3em;
-       }
-     </file>
-     <file name="protractor.js" type="protractor">
-       it('should check ng-class', function() {
-         expect(element(by.css('.base-class')).getAttribute('class')).not.
-           toMatch(/my-class/);
-
-         element(by.id('setbtn')).click();
-
-         expect(element(by.css('.base-class')).getAttribute('class')).
-           toMatch(/my-class/);
-
-         element(by.id('clearbtn')).click();
-
-         expect(element(by.css('.base-class')).getAttribute('class')).not.
-           toMatch(/my-class/);
-       });
-     </file>
-   </example>
-
-
-   ## ngClass and pre-existing CSS3 Transitions/Animations
-   The ngClass directive still supports CSS3 Transitions/Animations even if they do not follow the ngAnimate CSS naming structure.
-   Upon animation ngAnimate will apply supplementary CSS classes to track the start and end of an animation, but this will not hinder
-   any pre-existing CSS transitions already on the element. To get an idea of what happens during a class-based animation, be sure
-   to view the step by step details of {@link ngAnimate.$animate#addclass $animate.addClass} and
-   {@link ngAnimate.$animate#removeclass $animate.removeClass}.
- */
 var ngClassDirective = classDirective('', true);
 
 /**
