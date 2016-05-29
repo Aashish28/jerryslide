@@ -6948,12 +6948,9 @@ function $IntervalProvider() {
       return promise;
     }
 
-
      /**
       * @ngdoc method
       * @name $interval#cancel
-      *
-      * @description
       * Cancels a task associated with the `promise`.
       *
       * @param {promise} promise returned by the `$interval` function.
@@ -6968,7 +6965,6 @@ function $IntervalProvider() {
       }
       return false;
     };
-
     return interval;
   }];
 }
@@ -6976,8 +6972,6 @@ function $IntervalProvider() {
 /**
  * @ngdoc service
  * @name $locale
- *
- * @description
  * $locale service provides localization rules for various Angular components. As of right now the
  * only public api is:
  *
@@ -7049,13 +7043,7 @@ var PATH_MATCH = /^([^\?#]*)(\?([^#]*))?(#(.*))?$/,
     DEFAULT_PORTS = {'http': 80, 'https': 443, 'ftp': 21};
 var $locationMinErr = minErr('$location');
 
-
-/**
- * Encode path using encodeUriSegment, ignoring forward slashes
- *
- * @param {string} path Path to encode
- * @returns {string}
- */
+// @returns {string}
 function encodePath(path) {
   var segments = path.split('/'),
       i = segments.length;
@@ -7063,7 +7051,6 @@ function encodePath(path) {
   while (i--) {
     segments[i] = encodeUriSegment(segments[i]);
   }
-
   return segments.join('/');
 }
 
@@ -7074,7 +7061,6 @@ function parseAbsoluteUrl(absoluteUrl, locationObj, appBase) {
   locationObj.$$host = parsedUrl.hostname;
   locationObj.$$port = int(parsedUrl.port) || DEFAULT_PORTS[parsedUrl.protocol] || null;
 }
-
 
 function parseAppUrl(relativeUrl, locationObj, appBase) {
   var prefixed = (relativeUrl.charAt(0) !== '/');
@@ -7093,26 +7079,18 @@ function parseAppUrl(relativeUrl, locationObj, appBase) {
   }
 }
 
+// returns text from whole after begin or undefined if it does not begin with expected string.
 
-/**
- *
- * @param {string} begin
- * @param {string} whole
- * @returns {string} returns text from whole after begin or undefined if it does not begin with
- *                   expected string.
- */
 function beginsWith(begin, whole) {
   if (whole.indexOf(begin) === 0) {
     return whole.substr(begin.length);
   }
 }
 
-
 function stripHash(url) {
   var index = url.indexOf('#');
   return index == -1 ? url : url.substr(0, index);
 }
-
 
 function stripFile(url) {
   return url.substr(0, stripHash(url).lastIndexOf('/') + 1);
@@ -7122,7 +7100,6 @@ function stripFile(url) {
 function serverBase(url) {
   return url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
 }
-
 
 /**
  * LocationHtml5Url represents an url
@@ -7138,7 +7115,6 @@ function LocationHtml5Url(appBase, basePrefix) {
   var appBaseNoFile = stripFile(appBase);
   parseAbsoluteUrl(appBase, this, appBase);
 
-
   /**
    * Parse given html5 (regular) url string into properties
    * @param {string} newAbsoluteUrl HTML5 url
@@ -7150,13 +7126,11 @@ function LocationHtml5Url(appBase, basePrefix) {
       throw $locationMinErr('ipthprfx', 'Invalid url "{0}", missing path prefix "{1}".', url,
           appBaseNoFile);
     }
-
     parseAppUrl(pathUrl, this, appBase);
 
     if (!this.$$path) {
       this.$$path = '/';
     }
-
     this.$$compose();
   };
 
@@ -7190,7 +7164,6 @@ function LocationHtml5Url(appBase, basePrefix) {
   };
 }
 
-
 /**
  * LocationHashbangUrl represents url
  * This object is exposed as $location service when developer doesn't opt into html5 mode.
@@ -7204,7 +7177,6 @@ function LocationHashbangUrl(appBase, hashPrefix) {
   var appBaseNoFile = stripFile(appBase);
 
   parseAbsoluteUrl(appBase, this, appBase);
-
 
   /**
    * Parse given hashbang url into properties
@@ -7258,7 +7230,6 @@ function LocationHashbangUrl(appBase, hashPrefix) {
       if (windowsFilePathExp.exec(url)) {
         return path;
       }
-
       firstPathSegmentMatch = windowsFilePathExp.exec(path);
       return firstPathSegmentMatch ? firstPathSegmentMatch[1] : path;
     }
@@ -7282,7 +7253,6 @@ function LocationHashbangUrl(appBase, hashPrefix) {
     }
   };
 }
-
 
 /**
  * LocationHashbangUrl represents url
@@ -7319,9 +7289,7 @@ function LocationHashbangInHtml5Url(appBase, hashPrefix) {
     // include hashPrefix in $$absUrl when $$url is empty so IE8 & 9 do not reload page because of removal of '#'
     this.$$absUrl = appBase + hashPrefix + this.$$url;
   };
-
 }
-
 
 LocationHashbangInHtml5Url.prototype =
   LocationHashbangUrl.prototype =
@@ -7333,10 +7301,7 @@ LocationHashbangInHtml5Url.prototype =
    */
   $$html5: false,
 
-  /**
-   * Has any change been replacing ?
-   * @private
-   */
+  // Has any change been replacing ?
   $$replace: false,
 
   /**
@@ -7450,19 +7415,14 @@ LocationHashbangInHtml5Url.prototype =
    * Return search part (as object) of current url when called without any parameter.
    *
    * Change search part when called with parameter and return `$location`.
-   *
-   *
    * ```js
    * // given url http://example.com/#/some/path?foo=bar&baz=xoxo
    * var searchObject = $location.search();
    * // => {foo: 'bar', baz: 'xoxo'}
-   *
-   *
    * // set foo to 'yipee'
    * $location.search('foo', 'yipee');
    * // => $location
    * ```
-   *
    * @param {string|Object.<string>|Object.<Array.<string>>} search New search params - string or
    * hash object.
    *
@@ -7528,8 +7488,6 @@ LocationHashbangInHtml5Url.prototype =
   /**
    * @ngdoc method
    * @name $location#replace
-   *
-   * @description
    * If called, all changes to $location during current `$digest` will be replacing current history
    * record, instead of adding new one.
    */
@@ -7545,7 +7503,6 @@ function locationGetter(property) {
   };
 }
 
-
 function locationGetterSetter(property, preprocess) {
   return function(value) {
     if (isUndefined(value))
@@ -7557,7 +7514,6 @@ function locationGetterSetter(property, preprocess) {
     return this;
   };
 }
-
 
 /**
  * @ngdoc service
@@ -7588,7 +7544,6 @@ function locationGetterSetter(property, preprocess) {
 /**
  * @ngdoc provider
  * @name $locationProvider
- * @description
  * Use the `$locationProvider` to configure how the application deep linking paths are stored.
  */
 function $LocationProvider(){
@@ -7614,7 +7569,6 @@ function $LocationProvider(){
   /**
    * @ngdoc property
    * @name $locationProvider#html5Mode
-   * @description
    * @param {boolean=} mode Use HTML5 strategy if available.
    * @returns {*} current value if used as getter or itself (chaining) if used as setter
    */
@@ -7741,7 +7695,6 @@ function $LocationProvider(){
       }
     });
 
-
     // rewrite hashbang url <> html5 url
     if ($location.absUrl() != initialUrl) {
       $browser.url($location.absUrl(), true);
@@ -7801,8 +7754,6 @@ function $LocationProvider(){
  * @ngdoc service
  * @name $log
  * @requires $window
- *
- * @description
  * Simple service for logging. Default implementation safely writes the message
  * into the browser's console (if present).
  *
@@ -7846,7 +7797,6 @@ function $LogProvider(){
   /**
    * @ngdoc property
    * @name $logProvider#debugEnabled
-   * @description
    * @param {boolean=} flag enable or disable debug level messages
    * @returns {*} current value if used as getter or itself (chaining) if used as setter
    */
@@ -7864,8 +7814,6 @@ function $LogProvider(){
       /**
        * @ngdoc method
        * @name $log#log
-       *
-       * @description
        * Write a log message
        */
       log: consoleLog('log'),
@@ -7963,13 +7911,11 @@ var promiseWarningCache = {};
 var promiseWarning;
 
 // Sandboxing Angular Expressions
-// ------------------------------
 // Angular expressions are generally considered safe because these expressions only have direct
 // access to $scope and locals. However, one can obtain the ability to execute arbitrary JS code by
 // obtaining a reference to native JS functions such as the Function constructor.
 //
 // As an example, consider the following Angular expression:
-//
 //   {}.toString.constructor(alert("evil JS code"))
 //
 // We want to prevent this type of access. For the sake of performance, during the lexing phase we
@@ -8064,13 +8010,7 @@ var OPERATORS = {
 /* jshint bitwise: true */
 var ESCAPE = {"n":"\n", "f":"\f", "r":"\r", "t":"\t", "v":"\v", "'":"'", '"':'"'};
 
-
-/////////////////////////////////////////
-
-
-/**
- * @constructor
- */
+// @constructor
 var Lexer = function (options) {
   this.options = options;
 };
@@ -8247,7 +8187,6 @@ Lexer.prototype = {
       }
     }
 
-
     var token = {
       index: start,
       text: ident
@@ -8330,10 +8269,7 @@ Lexer.prototype = {
   }
 };
 
-
-/**
- * @constructor
- */
+// constructor
 var Parser = function (lexer, $filter, options) {
   this.lexer = lexer;
   this.$filter = $filter;
@@ -8473,7 +8409,6 @@ Parser.prototype = {
         statements.push(this.filterChain());
       if (!this.expect(';')) {
         // optimize for the common case where there is only one statement.
-        // TODO(size): maybe we should not support multiple statements?
         return (statements.length === 1)
             ? statements[0]
             : function(self, locals) {
@@ -8775,10 +8710,7 @@ Parser.prototype = {
   }
 };
 
-
-//////////////////////////////////////////////////
 // Parser helper functions
-//////////////////////////////////////////////////
 
 function setter(obj, path, setValue, fullExp, options) {
   //needed?
@@ -9018,15 +8950,10 @@ function getterFn(path, options, fullExp) {
   return fn;
 }
 
-///////////////////////////////////
-
 /**
  * @ngdoc service
  * @name $parse
  * @kind function
- *
- * @description
- *
  * Converts Angular {@link guide/expression expression} into a function.
  *
  * ```js
@@ -9040,8 +8967,6 @@ function getterFn(path, options, fullExp) {
  *   expect(context.user.name).toEqual('newValue');
  *   expect(getter(context, locals)).toEqual('local');
  * ```
- *
- *
  * @param {string} expression String expression to compile.
  * @returns {function(context, locals)} a function which represents the compiled expression:
  *
@@ -9059,7 +8984,6 @@ function getterFn(path, options, fullExp) {
  *        set to a function to change its value on the given context.
  *
  */
-
 
 /**
  * @ngdoc provider
@@ -9079,14 +9003,11 @@ function $ParseProvider() {
     logPromiseWarnings: true
   };
 
-
   /**
    * @deprecated Promise unwrapping via $parse is deprecated and will be removed in the future.
    *
    * @ngdoc method
    * @name $parseProvider#unwrapPromises
-   * @description
-   *
    * **This feature is deprecated, see deprecation notes below for more info**
    *
    * If set to true (default is false), $parse will unwrap promises automatically when a promise is
@@ -9133,7 +9054,6 @@ function $ParseProvider() {
     }
   };
 
-
   /**
    * @deprecated Promise unwrapping via $parse is deprecated and will be removed in the future.
    *
@@ -9159,7 +9079,6 @@ function $ParseProvider() {
       return $parseOptions.logPromiseWarnings;
     }
   };
-
 
   this.$get = ['$filter', '$sniffer', '$log', function($filter, $sniffer, $log) {
     $parseOptions.csp = $sniffer.csp;
@@ -9190,7 +9109,6 @@ function $ParseProvider() {
             // This is more performant that using Object.prototype.hasOwnProperty.call
             cache[exp] = parsedExpression;
           }
-
           return parsedExpression;
 
         case 'function':
@@ -9207,8 +9125,6 @@ function $ParseProvider() {
  * @ngdoc service
  * @name $q
  * @requires $rootScope
- *
- * @description
  * A promise/deferred implementation inspired by [Kris Kowal's Q](https://github.com/kriskowal/q).
  *
  * [The CommonJS Promise proposal](http://wiki.commonjs.org/wiki/Promises) describes a promise as an
@@ -9380,7 +9296,6 @@ function $QProvider() {
   }];
 }
 
-
 /**
  * Constructs a promise manager.
  *
@@ -9390,13 +9305,10 @@ function $QProvider() {
  * @returns {object} Promise manager.
  */
 function qFactory(nextTick, exceptionHandler) {
-
   /**
    * @ngdoc method
    * @name $q#defer
    * @kind function
-   *
-   * @description
    * Creates a `Deferred` object which represents a task which will finish in the future.
    *
    * @returns {Deferred} Returns a new instance of deferred.
@@ -9425,11 +9337,9 @@ function qFactory(nextTick, exceptionHandler) {
         }
       },
 
-
       reject: function(reason) {
         deferred.resolve(createInternalRejectedPromise(reason));
       },
-
 
       notify: function(progress) {
         if (pending) {
@@ -9446,7 +9356,6 @@ function qFactory(nextTick, exceptionHandler) {
           }
         }
       },
-
 
       promise: {
         then: function(callback, errback, progressback) {
@@ -9529,10 +9438,8 @@ function qFactory(nextTick, exceptionHandler) {
         }
       }
     };
-
     return deferred;
   };
-
 
   var ref = function(value) {
     if (value && isFunction(value.then)) return value;
@@ -9547,13 +9454,10 @@ function qFactory(nextTick, exceptionHandler) {
     };
   };
 
-
   /**
    * @ngdoc method
    * @name $q#reject
    * @kind function
-   *
-   * @description
    * Creates a promise that is resolved as rejected with the specified `reason`. This api should be
    * used to forward rejection in a chain of promises. If you are dealing with the last promise in
    * a promise chain, you don't need to worry about it.
@@ -9607,13 +9511,10 @@ function qFactory(nextTick, exceptionHandler) {
     };
   };
 
-
   /**
    * @ngdoc method
    * @name $q#when
    * @kind function
-   *
-   * @description
    * Wraps an object that might be a value or a (3rd party) then-able promise into a $q promise.
    * This is useful when you are dealing with an object that might or might not be a promise, or if
    * the promise comes from a source that can't be trusted.
@@ -9669,23 +9570,18 @@ function qFactory(nextTick, exceptionHandler) {
     return result.promise;
   };
 
-
   function defaultCallback(value) {
     return value;
   }
-
 
   function defaultErrback(reason) {
     return reject(reason);
   }
 
-
   /**
    * @ngdoc method
    * @name $q#all
    * @kind function
-   *
-   * @description
    * Combines multiple promises into a single promise that is resolved when all of the input
    * promises are resolved.
    *
@@ -9715,7 +9611,6 @@ function qFactory(nextTick, exceptionHandler) {
     if (counter === 0) {
       deferred.resolve(results);
     }
-
     return deferred.promise;
   }
 
@@ -9752,9 +9647,7 @@ function $$RAFProvider(){ //rAF
             $timeout.cancel(timer);
           };
         };
-
     raf.supported = rafSupported;
-
     return raf;
   }];
 }
@@ -9784,20 +9677,15 @@ function $$RAFProvider(){ //rAF
  * are expensive to construct.
  */
 
-
 /**
  * @ngdoc provider
  * @name $rootScopeProvider
- * @description
- *
  * Provider for the $rootScope service.
  */
 
 /**
  * @ngdoc method
  * @name $rootScopeProvider#digestTtl
- * @description
- *
  * Sets the number of `$digest` iterations the scope should attempt to execute before giving up and
  * assuming that the model is unstable.
  *
@@ -9814,12 +9702,9 @@ function $$RAFProvider(){ //rAF
  * @param {number} limit The number of digest iterations.
  */
 
-
 /**
  * @ngdoc service
  * @name $rootScope
- * @description
- *
  * Every application has a single root {@link ng.$rootScope.Scope scope}.
  * All other scopes are descendant scopes of the root scope. Scopes provide separation
  * between the model and the view, via a mechanism for watching the model for changes.
@@ -9844,8 +9729,6 @@ function $RootScopeProvider(){
     /**
      * @ngdoc type
      * @name $rootScope.Scope
-     *
-     * @description
      * A root scope can be retrieved using the {@link ng.$rootScope $rootScope} key from the
      * {@link auto.$injector $injector}. Child scopes are created using the
      * {@link ng.$rootScope.Scope#$new $new()} method. (Most scopes are created automatically when
@@ -9855,7 +9738,6 @@ function $RootScopeProvider(){
      * ```html
      * <file src="./test/ng/rootScopeSpec.js" tag="docs1" />
      * ```
-     *
      * # Inheritance
      * A scope can inherit from a parent scope, as in this example:
      * ```js
@@ -9870,8 +9752,6 @@ function $RootScopeProvider(){
          expect(child.salutation).toEqual('Welcome');
          expect(parent.salutation).toEqual('Hello');
      * ```
-     *
-     *
      * @param {Object.<string, function()>=} providers Map of service factory which need to be
      *                                       provided for the current scope. Defaults to {@link ng}.
      * @param {Object.<string, *>=} instanceCache Provides pre-instantiated services which should
@@ -9902,15 +9782,12 @@ function $RootScopeProvider(){
      *   debugging.
      */
 
-
     Scope.prototype = {
       constructor: Scope,
       /**
        * @ngdoc method
        * @name $rootScope.Scope#$new
        * @kind function
-       *
-       * @description
        * Creates a new child {@link ng.$rootScope.Scope scope}.
        *
        * The parent scope will propagate the {@link ng.$rootScope.Scope#$digest $digest()} and
@@ -9927,7 +9804,6 @@ function $RootScopeProvider(){
        *         state.
        *
        * @returns {Object} The newly created child scope.
-       *
        */
       $new: function(isolate) {
         var ChildScope,
@@ -9971,8 +9847,6 @@ function $RootScopeProvider(){
        * @ngdoc method
        * @name $rootScope.Scope#$watch
        * @kind function
-       *
-       * @description
        * Registers a `listener` callback to be executed whenever the `watchExpression` changes.
        *
        * - The `watchExpression` is called on every call to {@link ng.$rootScope.Scope#$digest
@@ -10008,8 +9882,6 @@ function $RootScopeProvider(){
        * listener was called due to initialization.
        *
        * The example below contains an illustration of using a function as your $watch listener
-       *
-       *
        * # Example
        * ```js
            // let's assume that scope was dependency injected as the $rootScope
@@ -10034,8 +9906,6 @@ function $RootScopeProvider(){
            scope.name = 'adam';
            scope.$digest();
            expect(scope.counter).toEqual(2);
-
-
 
            // Using a listener function
            var food;
@@ -10065,9 +9935,6 @@ function $RootScopeProvider(){
            expect(scope.foodCounter).toEqual(1);
 
        * ```
-       *
-       *
-       *
        * @param {(function()|string)} watchExpression Expression that is evaluated on each
        *    {@link ng.$rootScope.Scope#$digest $digest} cycle. A change in the return value triggers
        *    a call to the `listener`.
@@ -10126,13 +9993,10 @@ function $RootScopeProvider(){
         };
       },
 
-
       /**
        * @ngdoc method
        * @name $rootScope.Scope#$watchCollection
        * @kind function
-       *
-       * @description
        * Shallow watches the properties of an object and fires whenever any of the properties change
        * (for arrays, this implies watching the array items; for object maps, this implies watching
        * the properties). If a change is detected, the `listener` callback is fired.
@@ -10141,8 +10005,6 @@ function $RootScopeProvider(){
        *   call to $digest() to see if any items have been added, removed, or moved.
        * - The `listener` is called whenever anything within the `obj` has changed. Examples include
        *   adding, removing, and moving items belonging to an object or array.
-       *
-       *
        * # Example
        * ```js
           $scope.names = ['igor', 'matias', 'misko', 'james'];
@@ -10164,8 +10026,6 @@ function $RootScopeProvider(){
           //now there's been a change
           expect($scope.dataCount).toEqual(3);
        * ```
-       *
-       *
        * @param {string|function(scope)} obj Evaluated as {@link guide/expression expression}. The
        *    expression value should evaluate to an object or an array which is observed on each
        *    {@link ng.$rootScope.Scope#$digest $digest} cycle. Any shallow change within the
@@ -10270,7 +10130,6 @@ function $RootScopeProvider(){
           }
           return changeDetected;
         }
-
         function $watchCollectionAction() {
           if (initRun) {
             initRun = false;
@@ -10299,7 +10158,6 @@ function $RootScopeProvider(){
             }
           }
         }
-
         return this.$watch($watchCollectionWatch, $watchCollectionAction);
       },
 
@@ -10426,7 +10284,6 @@ function $RootScopeProvider(){
                 }
               }
             }
-
             // Insanity Warning: scope depth-first traversal
             // yes, this code is a bit crazy, but it works and we have tests to prove it!
             // this piece should be kept in sync with the traversal in $broadcast
@@ -10461,13 +10318,10 @@ function $RootScopeProvider(){
         }
       },
 
-
       /**
        * @ngdoc event
        * @name $rootScope.Scope#$destroy
        * @eventType broadcast on scope being destroyed
-       *
-       * @description
        * Broadcasted when a scope and its children are being destroyed.
        *
        * Note that, in AngularJS, there is also a `$destroy` jQuery event, which can be used to
@@ -10517,7 +10371,6 @@ function $RootScopeProvider(){
 
         // All of the code below is bogus code that works around V8's memory leak via optimized code
         // and inline caches.
-        //
         // see:
         // - https://code.google.com/p/v8/issues/detail?id=2073#c26
         // - https://github.com/angular/angular.js/issues/6794#issuecomment-38648909
@@ -10571,8 +10424,6 @@ function $RootScopeProvider(){
        * @ngdoc method
        * @name $rootScope.Scope#$evalAsync
        * @kind function
-       *
-       * @description
        * Executes the expression on the current scope at a later point in time.
        *
        * The `$evalAsync` makes no guarantees as to when the `expression` will be executed, only
@@ -10606,7 +10457,6 @@ function $RootScopeProvider(){
             }
           });
         }
-
         this.$$asyncQueue.push({scope: this, expression: expr});
       },
 
@@ -10618,8 +10468,6 @@ function $RootScopeProvider(){
        * @ngdoc method
        * @name $rootScope.Scope#$apply
        * @kind function
-       *
-       * @description
        * `$apply()` is used to execute an expression in angular from outside of the angular
        * framework. (For example from browser DOM events, setTimeout, XHR or third party libraries).
        * Because we are calling into the angular framework we need to perform proper scope life
@@ -10640,8 +10488,6 @@ function $RootScopeProvider(){
              }
            }
        * ```
-       *
-       *
        * Scope's `$apply()` method transitions through the following stages:
        *
        * 1. The {@link guide/expression expression} is executed using the
@@ -10650,8 +10496,6 @@ function $RootScopeProvider(){
        *    {@link ng.$exceptionHandler $exceptionHandler} service.
        * 3. The {@link ng.$rootScope.Scope#$watch watch} listeners are fired immediately after the
        *    expression was executed using the {@link ng.$rootScope.Scope#$digest $digest()} method.
-       *
-       *
        * @param {(string|function())=} exp An angular expression to be executed.
        *
        *    - `string`: execute using the rules as defined in {@link guide/expression expression}.
