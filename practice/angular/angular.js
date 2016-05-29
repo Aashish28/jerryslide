@@ -11175,8 +11175,6 @@ function $SceProvider() {
    *
    * @param {boolean=} value If provided, then enables/disables SCE.
    * @return {boolean} true if SCE is enabled, false otherwise.
-   *
-   * @description
    * Enables/disables SCE and returns the current value.
    */
   this.enabled = function (value) {
@@ -11185,7 +11183,6 @@ function $SceProvider() {
     }
     return enabled;
   };
-
 
   /* Design notes on the default implementation for SCE.
    *
@@ -11243,7 +11240,6 @@ function $SceProvider() {
         'mode.  You can fix this by adding the text <!doctype html> to the top of your HTML ' +
         'document.  See http://docs.angularjs.org/api/ng.$sce for more information.');
     }
-
     var sce = shallowCopy(SCE_CONTEXTS);
 
     /**
@@ -11253,8 +11249,6 @@ function $SceProvider() {
      *
      * @return {Boolean} true if SCE is enabled, false otherwise.  If you want to set the value, you
      * have to do it at module config time on {@link ng.$sceProvider $sceProvider}.
-     *
-     * @description
      * Returns a boolean indicating if SCE is enabled.
      */
     sce.isEnabled = function () {
@@ -11272,8 +11266,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#parse
-     *
-     * @description
      * Converts Angular {@link guide/expression expression} into a function.  This is like {@link
      * ng.$parse $parse} and is identical when the expression is a literal constant.  Otherwise, it
      * wraps the expression in a call to {@link ng.$sce#getTrusted $sce.getTrusted(*type*,
@@ -11302,8 +11294,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#trustAs
-     *
-     * @description
      * Delegates to {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs`}.  As such,
      * returns an object that is trusted by angular for use in specified strict contextual
      * escaping contexts (such as ng-bind-html, ng-include, any src attribute
@@ -11321,8 +11311,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#trustAsHtml
-     *
-     * @description
      * Shorthand method.  `$sce.trustAsHtml(value)` →
      *     {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs($sce.HTML, value)`}
      *
@@ -11336,8 +11324,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#trustAsUrl
-     *
-     * @description
      * Shorthand method.  `$sce.trustAsUrl(value)` →
      *     {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs($sce.URL, value)`}
      *
@@ -11351,8 +11337,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#trustAsResourceUrl
-     *
-     * @description
      * Shorthand method.  `$sce.trustAsResourceUrl(value)` →
      *     {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs($sce.RESOURCE_URL, value)`}
      *
@@ -11366,8 +11350,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#trustAsJs
-     *
-     * @description
      * Shorthand method.  `$sce.trustAsJs(value)` →
      *     {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs($sce.JS, value)`}
      *
@@ -11381,8 +11363,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#getTrusted
-     *
-     * @description
      * Delegates to {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted`}.  As such,
      * takes the result of a {@link ng.$sce#trustAs `$sce.trustAs`}() call and returns the
      * originally supplied value if the queried context type is a supertype of the created type.
@@ -11399,8 +11379,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#getTrustedHtml
-     *
-     * @description
      * Shorthand method.  `$sce.getTrustedHtml(value)` →
      *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.HTML, value)`}
      *
@@ -11411,8 +11389,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#getTrustedCss
-     *
-     * @description
      * Shorthand method.  `$sce.getTrustedCss(value)` →
      *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.CSS, value)`}
      *
@@ -11423,8 +11399,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#getTrustedUrl
-     *
-     * @description
      * Shorthand method.  `$sce.getTrustedUrl(value)` →
      *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.URL, value)`}
      *
@@ -11435,8 +11409,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#getTrustedResourceUrl
-     *
-     * @description
      * Shorthand method.  `$sce.getTrustedResourceUrl(value)` →
      *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.RESOURCE_URL, value)`}
      *
@@ -11447,8 +11419,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#getTrustedJs
-     *
-     * @description
      * Shorthand method.  `$sce.getTrustedJs(value)` →
      *     {@link ng.$sceDelegate#getTrusted `$sceDelegate.getTrusted($sce.JS, value)`}
      *
@@ -11459,8 +11429,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#parseAsHtml
-     *
-     * @description
      * Shorthand method.  `$sce.parseAsHtml(expression string)` →
      *     {@link ng.$sce#parse `$sce.parseAs($sce.HTML, value)`}
      *
@@ -11476,8 +11444,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#parseAsCss
-     *
-     * @description
      * Shorthand method.  `$sce.parseAsCss(value)` →
      *     {@link ng.$sce#parse `$sce.parseAs($sce.CSS, value)`}
      *
@@ -11493,8 +11459,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#parseAsUrl
-     *
-     * @description
      * Shorthand method.  `$sce.parseAsUrl(value)` →
      *     {@link ng.$sce#parse `$sce.parseAs($sce.URL, value)`}
      *
@@ -11510,8 +11474,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#parseAsResourceUrl
-     *
-     * @description
      * Shorthand method.  `$sce.parseAsResourceUrl(value)` →
      *     {@link ng.$sce#parse `$sce.parseAs($sce.RESOURCE_URL, value)`}
      *
@@ -11527,8 +11489,6 @@ function $SceProvider() {
     /**
      * @ngdoc method
      * @name $sce#parseAsJs
-     *
-     * @description
      * Shorthand method.  `$sce.parseAsJs(value)` →
      *     {@link ng.$sce#parse `$sce.parseAs($sce.JS, value)`}
      *
@@ -11574,8 +11534,6 @@ function $SceProvider() {
  * @property {boolean} hashchange Does the browser support hashchange event ?
  * @property {boolean} transitions Does the browser support CSS transition events ?
  * @property {boolean} animations Does the browser support CSS animation events ?
- *
- * @description
  * This is very simple implementation of testing browser's features.
  */
 function $SnifferProvider() {
@@ -11601,7 +11559,6 @@ function $SnifferProvider() {
           break;
         }
       }
-
       if(!vendorPrefix) {
         vendorPrefix = ('WebkitOpacity' in bodyStyle) && 'webkit';
       }
@@ -11614,7 +11571,6 @@ function $SnifferProvider() {
         animations = isString(document.body.style.webkitAnimation);
       }
     }
-
 
     return {
       // Android has history.pushState, but it does not update location correctly
@@ -11664,8 +11620,6 @@ function $TimeoutProvider() {
      /**
       * @ngdoc service
       * @name $timeout
-      *
-      * @description
       * Angular's wrapper for `window.setTimeout`. The `fn` function is wrapped into a try/catch
       * block and delegates any exceptions to
       * {@link ng.$exceptionHandler $exceptionHandler} service.
@@ -11712,12 +11666,9 @@ function $TimeoutProvider() {
       return promise;
     }
 
-
      /**
       * @ngdoc method
       * @name $timeout#cancel
-      *
-      * @description
       * Cancels a task associated with the `promise`. As a result of this, the promise will be
       * resolved with a rejection.
       *
@@ -11733,7 +11684,6 @@ function $TimeoutProvider() {
       }
       return false;
     };
-
     return timeout;
   }];
 }
@@ -11748,9 +11698,7 @@ function $TimeoutProvider() {
 var urlParsingNode = document.createElement("a");
 var originUrl = urlResolve(window.location.href, true);
 
-
 /**
- *
  * Implementation Notes for non-IE browsers
  * ----------------------------------------
  * Assigning a URL to the href property of an anchor DOM node, even one attached to the DOM,
@@ -11830,7 +11778,6 @@ function urlResolve(url, base) {
 
 /**
  * Parse a request URL and determine whether this is a same-origin request as the application document.
- *
  * @param {string|object} requestUrl The url of the request as a string that will be resolved
  * or a parsed URL object.
  * @returns {boolean} Whether the request is for the same origin as the application document.
@@ -11844,8 +11791,6 @@ function urlIsSameOrigin(requestUrl) {
 /**
  * @ngdoc service
  * @name $window
- *
- * @description
  * A reference to the browser's `window` object. While `window`
  * is globally available in JavaScript, it causes testability problems, because
  * it is a global variable. In angular we always refer to it through the
@@ -11914,7 +11859,6 @@ function $WindowProvider(){
  *     });
  *   }
  * ```
- *
  * The filter function is registered with the `$injector` under the filter name suffix with
  * `Filter`.
  *
@@ -11929,8 +11873,6 @@ function $WindowProvider(){
  *       expect($filter('reverse')).toBe(reverseFilter);
  *     });
  * ```
- *
- *
  * For more information about how angular filters work, and how to create your own filters, see
  * {@link guide/filter Filters} in the Angular Developer Guide.
  */
@@ -12007,8 +11949,6 @@ function $FilterProvider($provide) {
     };
   }];
 
-  ////////////////////////////////////////
-
   /* global
     currencyFilter: false,
     dateFilter: false,
@@ -12036,8 +11976,6 @@ function $FilterProvider($provide) {
  * @ngdoc filter
  * @name filter
  * @kind function
- *
- * @description
  * Selects a subset of items from `array` and returns it as a new array.
  *
  * @param {Array} array The source array.
@@ -12255,8 +12193,6 @@ function filterFilter() {
  * @ngdoc filter
  * @name currency
  * @kind function
- *
- * @description
  * Formats a number as a currency (ie $1,234.56). When no currency symbol is provided, default
  * symbol for current locale is used.
  *
@@ -12312,8 +12248,6 @@ function currencyFilter($locale) {
  * @ngdoc filter
  * @name number
  * @kind function
- *
- * @description
  * Formats a number as text.
  *
  * If the input is not a number an empty string is returned.
@@ -12356,7 +12290,6 @@ function currencyFilter($locale) {
      </file>
    </example>
  */
-
 
 numberFilter.$inject = ['$locale'];
 function numberFilter($locale) {
@@ -12435,7 +12368,6 @@ function formatNumber(number, pattern, groupSep, decimalSep, fractionSize) {
       formatedText = number.toFixed(fractionSize);
     }
   }
-
   parts.push(isNegative ? pattern.negPre : pattern.posPre);
   parts.push(formatedText);
   parts.push(isNegative ? pattern.negSuf : pattern.posSuf);
@@ -12454,7 +12386,6 @@ function padNumber(num, digits, trim) {
     num = num.substr(num.length - digits);
   return neg + num;
 }
-
 
 function dateGetter(name, size, offset, trim) {
   offset = offset || 0;
@@ -12524,8 +12455,6 @@ var DATE_FORMATS_SPLIT = /((?:[^yMdHhmsaZE']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|d+
  * @ngdoc filter
  * @name date
  * @kind function
- *
- * @description
  *   Formats `date` to a string based on the requested `format`.
  *
  *   `format` string can be composed of the following elements:
@@ -12604,7 +12533,6 @@ var DATE_FORMATS_SPLIT = /((?:[^yMdHhmsaZE']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|d+
 dateFilter.$inject = ['$locale'];
 function dateFilter($locale) {
 
-
   var R_ISO8601_STR = /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
                      // 1        2       3         4          5          6          7          8  9     10      11
   function jsonStringToDate(string) {
@@ -12630,7 +12558,6 @@ function dateFilter($locale) {
     }
     return string;
   }
-
 
   return function(date, format) {
     var text = '',
@@ -12676,13 +12603,10 @@ function dateFilter($locale) {
   };
 }
 
-
 /**
  * @ngdoc filter
  * @name json
  * @kind function
- *
- * @description
  *   Allows you to convert a JavaScript object into JSON string.
  *
  *   This filter is mostly useful for debugging. When using the double curly {{value}} notation
@@ -12711,34 +12635,16 @@ function jsonFilter() {
   };
 }
 
+// Converts string to lowercase.
 
-/**
- * @ngdoc filter
- * @name lowercase
- * @kind function
- * @description
- * Converts string to lowercase.
- * @see angular.lowercase
- */
 var lowercaseFilter = valueFn(lowercase);
 
-
-/**
- * @ngdoc filter
- * @name uppercase
- * @kind function
- * @description
- * Converts string to uppercase.
- * @see angular.uppercase
- */
 var uppercaseFilter = valueFn(uppercase);
 
 /**
  * @ngdoc filter
  * @name limitTo
  * @kind function
- *
- * @description
  * Creates a new array or string containing only a specified number of elements. The elements
  * are taken from either the beginning or the end of the source array or string, as specified by
  * the value and sign (positive or negative) of `limit`.
@@ -12820,7 +12726,6 @@ function limitToFilter(){
         return "";
       }
     }
-
     var out = [],
       i, n;
 
@@ -12841,7 +12746,6 @@ function limitToFilter(){
     for (; i<n; i++) {
       out.push(input[i]);
     }
-
     return out;
   };
 }
@@ -12850,8 +12754,6 @@ function limitToFilter(){
  * @ngdoc filter
  * @name orderBy
  * @kind function
- *
- * @description
  * Orders a specified `array` by the `expression` predicate. It is ordered alphabetically
  * for strings and numerically for numbers. Note: if you notice numbers are not being sorted
  * correctly, make sure they are actually being saved as numbers and not strings.
