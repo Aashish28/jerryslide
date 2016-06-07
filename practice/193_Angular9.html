@@ -6,7 +6,7 @@
     <script>
       var nameApp = angular.module('nameApp', []);
       nameApp.controller('NameCtrl', function ($scope){
-        $scope.names = ['Larry', 'Curly', 'Moe'];
+        $scope.names = ['Larry', 'Moe'];
 
         $scope.addName = function() {
           $scope.names.push($scope.enteredName);
@@ -23,7 +23,7 @@
   <body ng-controller="NameCtrl">
     <ul>
       <li ng-repeat="name in names">{{name}}
-        <a href="" ng-click="removeName(name)">remove</a>
+        <a href="" ng-click="removeName(name)">remove me</a>
       </li>
     </ul>
     <form ng-submit="addName()">
