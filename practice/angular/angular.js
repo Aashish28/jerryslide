@@ -1642,6 +1642,11 @@ var jqLiteMinErr = minErr('jqLite');
  * @param name Name to normalize
  */
 function camelCase(name) {
+  /*if( window.debug){
+    if(name.indexOf("submit") != -1){
+      debugger;
+    }
+  }*/
   return name.
     replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
       return offset ? letter.toUpperCase() : letter;
