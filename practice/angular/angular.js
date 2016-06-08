@@ -1647,6 +1647,8 @@ function camelCase(name) {
       debugger;
     }
   }*/
+  if( name.indexOf("ng-click") != -1)
+    debugger;
   return name.
     replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
       return offset ? letter.toUpperCase() : letter;
@@ -4844,6 +4846,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               name = attr.name;
               // support ngAttr attribute binding
               ngAttrName = directiveNormalize(name);
+              console.log("Jerry raw Directive name: " + name + " converted: " + ngAttrName);
               if (NG_ATTR_BINDING.test(ngAttrName)) {
                 name = snake_case(ngAttrName.substr(6), '-');
               }
@@ -12095,7 +12098,10 @@ function $FilterProvider($provide) {
  */
 function filterFilter() {
   return function(array, expression, comparator) {
-    if (!isArray(array)) return array;
+    if (!isArray(array)) 
+      return array;
+    console.log("Jerry before filtering");
+    console.table(array);
 
     var comparatorType = typeof(comparator),
         predicates = [];
