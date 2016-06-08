@@ -1647,8 +1647,6 @@ function camelCase(name) {
       debugger;
     }
   }*/
-  if( name.indexOf("click") != -1)
-    debugger;
   return name.
     replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
       return offset ? letter.toUpperCase() : letter;
@@ -2776,6 +2774,8 @@ function createInjector(modulesToLoad) {
   function createInternalInjector(cache, factory) {
 
     function getService(serviceName) {
+      if( serviceName.indexOf("orderBy") != -1)
+          debugger;
       if (cache.hasOwnProperty(serviceName)) {
         if (cache[serviceName] === INSTANTIATING) {
           throw $injectorMinErr('cdep', 'Circular dependency found: {0}',
