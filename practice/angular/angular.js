@@ -1642,13 +1642,7 @@ var jqLiteMinErr = minErr('jqLite');
  * @param name Name to normalize
  */
 function camelCase(name) {
-  /*if( window.debug){
-    if(name.indexOf("submit") != -1){
-      debugger;
-    }
-  }*/
-  if( name.indexOf("ng-click") != -1)
-    debugger;
+
   return name.
     replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
       return offset ? letter.toUpperCase() : letter;
@@ -2776,8 +2770,6 @@ function createInjector(modulesToLoad) {
   function createInternalInjector(cache, factory) {
 
     function getService(serviceName) {
-      if( serviceName.indexOf("orderBy") != -1)
-          debugger;
       if (cache.hasOwnProperty(serviceName)) {
         if (cache[serviceName] === INSTANTIATING) {
           throw $injectorMinErr('cdep', 'Circular dependency found: {0}',
@@ -4847,6 +4839,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               // support ngAttr attribute binding
               ngAttrName = directiveNormalize(name);
               console.log("Jerry raw Directive name: " + name + " converted: " + ngAttrName);
+
               if (NG_ATTR_BINDING.test(ngAttrName)) {
                 name = snake_case(ngAttrName.substr(6), '-');
               }
@@ -15326,8 +15319,12 @@ forEach(
     ngEventDirectives[directiveName] = ['$parse', function($parse) {
       return {
         compile: function($element, attr) {
+          console.log("Jerry in compile, try to parse statement: " + attr[directiveName]);
           var fn = $parse(attr[directiveName]);
           return function ngEventHandler(scope, element) {
+            var singleElement = element.length === 1? element[0]:{};
+            console.log("Jerry begin to register event: " + name + " on element: " + singleElement.nodeName
+               + "---" + singleElement.innerHTML);
             element.on(lowercase(name), function(event) {
               scope.$apply(function() {
                 fn(scope, {$event:event});
