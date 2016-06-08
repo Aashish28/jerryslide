@@ -8264,7 +8264,9 @@ Lexer.prototype = {
           string: string,
           literal: true,
           constant: true,
-          fn: function() { return string; }
+          fn: function() { 
+            return string; 
+          }
         });
         return;
       } else {
@@ -8747,6 +8749,7 @@ function setter(obj, path, setValue, fullExp, options) {
   }
   key = ensureSafeMemberName(element.shift(), fullExp);
   obj[key] = setValue;
+  console.log("Jerry change scope key: " + key + " with value: " + setValue);
   return setValue;
 }
 

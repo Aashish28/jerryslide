@@ -11,6 +11,7 @@
           {"name": "India", "population": 1205625000},
           {"name": "United States of America","population": 312247000}
         ];
+        scope.sortField = 'population'
       }]);
     </script>
   </head>
@@ -18,10 +19,10 @@
     Search:<input ng-model="query" type="text"/>
     <table>
       <tr>
-        <th>Country</th>
-        <th>Population</th>
+        <th><a href="" ng-click="sortField = 'name'">Country</a></th>
+        <th><a href="" ng-click="sortField = 'population'">Population</a></th>
       </tr>
-      <tr ng-repeat="country in countries | filter:query | orderBy:'-population'">
+      <tr ng-repeat="country in countries | filter:query | orderBy:sortField">
         <td>{{country.name}}</td>
         <td>{{country.population}}</td>
       </tr>
