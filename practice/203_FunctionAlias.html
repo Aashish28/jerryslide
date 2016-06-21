@@ -1,0 +1,21 @@
+<html>
+<script>
+function main(){
+	var a = {
+		done: function (){
+			console.log("h");
+			debugger;
+		}
+	};
+	a.done(); // in debugger when I typed a.done, function debug() will be displayed.
+	          // if I hover it, I can also see body of this function.
+	          // If I remove "debug", I can also see body, however debug is gone.
+	          // 2016-06-21 15:30PM looking forward to this evening's swim
+
+};
+
+main();
+
+
+</script>
+</html>
