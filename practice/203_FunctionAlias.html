@@ -1,21 +1,30 @@
 <html>
 <script>
-function main(){
-	var a = {
-		done: function (){
-			console.log("h");
-			debugger;
-		}
-	};
-	a.done(); // in debugger when I typed a.done, function debug() will be displayed.
-	          // if I hover it, I can also see body of this function.
-	          // If I remove "debug", I can also see body, however debug is gone.
-	          // 2016-06-21 15:30PM looking forward to this evening's swim
+function Animal(name) {
+	this.sName = name;
+	console.log("constructor in Animal");
+}
 
+Animal.prototype.speak = function() {
+    console.log("My name is " + this.sName);
 };
 
-main();
+function Cat(name) {
+    Animal.call(this, name);
+    console.log("constructor in cat");
+}
 
+Cat.prototype = new Animal();
 
+var animal = new Animal("Jerry");
+animal.speak();
+
+var cat = new Cat('Tom');
+cat.speak(); 
+
+console.log("cat is animal?" + ( cat instanceof Animal ));
+console.log("cat is Cat?" + ( cat instanceof Cat ));
+console.log(cat.constructor);
+debugger;
 </script>
 </html>
