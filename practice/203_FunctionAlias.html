@@ -25,6 +25,13 @@ cat.speak();
 console.log("cat is animal?" + ( cat instanceof Animal ));
 console.log("cat is Cat?" + ( cat instanceof Cat ));
 console.log(cat.constructor);
+
+function Jerry(name){
+	console.log("Hello " + name);
+}
+
+var person = new Jerry("abap");
+var person2 = Jerry;
 debugger;
 </script>
 </html>

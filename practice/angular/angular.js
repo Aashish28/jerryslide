@@ -8865,7 +8865,10 @@ function simpleGetterFn1(key0, fullExp) {
 
   return function simpleGetterFn1(scope, locals) {
     if (scope == null) return undefined;
-    return ((locals && locals.hasOwnProperty(key0)) ? locals : scope)[key0];
+    var returnValue = ((locals && locals.hasOwnProperty(key0)) ? locals : scope)[key0];
+    console.log("Jerry trace simpleGetterFn1, try to get attribute from scope, attribute name: " + key0
+      + " return value: " + returnValue);
+    return returnValue;
   };
 }
 
@@ -9991,6 +9994,7 @@ function $RootScopeProvider(){
         }
         // we use unshift since we use a while loop in $digest for speed.
         // the while loop reads in reverse order.
+        console.log("Jerry trace, add watcher to scope: " + watcher);
         array.unshift(watcher);
 
         return function deregisterWatch() {
