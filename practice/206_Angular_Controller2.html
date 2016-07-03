@@ -6,7 +6,6 @@
     <script>
       function NameCtrl($scope){
         $scope.names = ['ABAP', 'Java'];
-
         $scope.addName = function() {
           if( $scope.names.indexOf($scope.enteredName) != -1){
             alert("duplicate key is not allowed in list: " + $scope.enteredName);
@@ -16,19 +15,12 @@
           $scope.names.push($scope.enteredName);
           $scope.enteredName = '';
         };
-
-        $scope.removeName = function(name) {
-          var i = $scope.names.indexOf(name);
-          $scope.names.splice(i, 1);
-        };
-      
     }
     </script>
   </head>
   <body ng-controller="NameCtrl">
     <ul>
       <li ng-repeat="name in names">{{name}}
-        <a href="" ng-click="removeName(name)">remove me</a>
       </li>
     </ul>
     <form ng-submit="addName()">
