@@ -19,11 +19,19 @@ console.log(result);*/
 var input = "HTTPs://localhost:8080/sap/opu/odata/sap/CRM_ODATA//DocumentNoteCollection(h…t=datetime'2015-10-23T10%3A41%3A27',textLanguageID='FR',textObjectID='A002')";
 
 var result = input.replace(/^http.*CRM_ODATA\/+(.*)/gi, function(s) {
-        debugger;
          return s;
      });
 
 console.log(result);
 
+var test = "df  /p * 3";// null
+test = "df  / p * 3"; // ok
+test = "df  /  p * 3"; // ok
+result = test.match(/^.*\/\s+.*/);
+
+test = "df   / p  3"
+result = test.match(/^.*\*.*\/\s+.*/); // null
+
+alert("result: " + result);
 </script>
 </html>
