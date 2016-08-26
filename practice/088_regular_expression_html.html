@@ -29,8 +29,9 @@ test = "df  / p * 3"; // ok
 test = "df  /  p * 3"; // ok
 result = test.match(/^.*\/\s+.*/);
 
-test = "df   / p  3"
-result = test.match(/^.*\*.*\/\s+.*/); // null
+test = "df 00   * 1000 / p  3"
+result = test.match(/^[^\*].*\*.*\/\s+.*/); // commit
+result = test.match(/^[^\*].*\*((?!000).)*\/\s+.*/); // null
 
 alert("result: " + result);
 </script>
