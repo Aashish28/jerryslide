@@ -329,7 +329,7 @@ CLASS ZCL_CRM_CM_TOOL IMPLEMENTATION.
     CALL METHOD cl_http_client=>create_by_url
       EXPORTING
         url                = iv_url
-        proxy_host         = 'PROXY.SHA.SAP.CORP'
+        proxy_host         = 'PROXY.WDF.SAP.CORP'
         proxy_service      = '8080'
 *        ssl_id             = 'ANONYM'
 *        sap_username       = ''
@@ -370,7 +370,8 @@ CLASS ZCL_CRM_CM_TOOL IMPLEMENTATION.
         IMPORTING
           code    = lv_sysubrc
           message = DATA(ev_message).
-        BREAK-POINT.
+        "BREAK-POINT.
+        WRITE: / 'error: ' , ev_message.
         RETURN.
    ENDIF.
 
@@ -471,8 +472,8 @@ CLASS ZCL_CRM_CM_TOOL IMPLEMENTATION.
     CALL METHOD cl_http_client=>create_by_url
       EXPORTING
         url                = iv_url
-*        proxy_host         = 'PROXY.SHA.SAP.CORP'
-*        proxy_service      = '8080'
+        proxy_host         = 'PROXY.WDF.SAP.CORP'
+        proxy_service      = '8080'
 *        ssl_id             = 'ANONYM'
 *        sap_username       = ''
 *        sap_client         = ''
@@ -512,7 +513,8 @@ CLASS ZCL_CRM_CM_TOOL IMPLEMENTATION.
         IMPORTING
           code    = lv_sysubrc
           message = DATA(ev_message).
-        BREAK-POINT.
+        "BREAK-POINT.
+        WRITE: / 'error: ' , ev_message.
         RETURN.
    ENDIF.
 

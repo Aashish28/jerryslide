@@ -140,9 +140,14 @@ public section.
       !IV_PATH type STRING
     returning
       value(RV_DATA) type XSTRING .
+  class-methods START_MEASURE .
+  class-methods END_MEASURE
+    returning
+      value(RV_DURATION) type I .
   PROTECTED SECTION.
 private section.
 
+  class-data SV_TIME type I .
   class-data MV_PRIVATE type STRING .
 
   class-methods CONVERT_TO_TIMESTAMP
@@ -303,6 +308,20 @@ CLASS ZCL_JERRY_TOOL IMPLEMENTATION.
   METHOD delete_dl_entry.
     DELETE FROM bsp_dlc_settings WHERE no_hidden = 'X'.
   ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Static Public Method ZCL_JERRY_TOOL=>END_MEASURE
+* +-------------------------------------------------------------------------------------------------+
+* | [<-()] RV_DURATION                    TYPE        I
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method END_MEASURE.
+    DATA: lv_time TYPE i.
+
+    GET RUN TIME FIELD lv_time.
+
+    rv_duration = lv_time - sv_time.
+  endmethod.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -1077,6 +1096,16 @@ CLASS ZCL_JERRY_TOOL IMPLEMENTATION.
 *Return total number of nodes
     ev_node_number = lv_node_counter.
   ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Static Public Method ZCL_JERRY_TOOL=>START_MEASURE
+* +-------------------------------------------------------------------------------------------------+
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method START_MEASURE.
+    CLEAR: sv_time.
+    GET RUN TIME FIELD sv_time.
+  endmethod.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
