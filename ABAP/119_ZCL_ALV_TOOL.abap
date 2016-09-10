@@ -5,6 +5,23 @@ class ZCL_ALV_TOOL definition
 
 public section.
 
+  types:
+    BEGIN OF ty_hierarchy,
+             id TYPE char18,
+             level TYPE int4,
+             description TYPE BEZEI40,
+         END OF ty_hierarchy .
+  types:
+    tt_hierarchy TYPE STANDARD TABLE OF ty_hierarchy WITH KEY id .
+  types:
+    BEGIN OF ty_displayed_node,
+         id   TYPE char18,
+         text TYPE char40,
+       END OF ty_displayed_node .
+
+  methods DRAW_TREE
+    importing
+      !IT_HIERARCHY type TT_HIERARCHY .
   methods GET_FIELDCAT_BY_DATA
     importing
       !IS_DATA type ANY
@@ -20,13 +37,82 @@ public section.
       !IO_CONTAINER type ref to CL_GUI_CUSTOM_CONTAINER
     returning
       value(RO_TREE) type ref to CL_GUI_ALV_TREE .
+  methods GET_TEST_DATA
+    returning
+      value(RT_TEST_DATA) type TT_HIERARCHY .
 protected section.
 private section.
+
+  types:
+    BEGIN OF ty_node_relation,
+            node_id TYPE char18,
+            node_level TYPE int4," current level of node_id
+            parent TYPE char18,
+         END OF ty_node_relation .
+  types:
+    tt_node_relation TYPE STANDARD TABLE OF ty_node_relation WITH KEY node_id .
+  types:
+    BEGIN OF ty_tree_key,
+             node_id TYPE char18,
+             tree_key TYPE lvc_nkey,
+         END OF ty_tree_key .
+  types:
+    tt_tree_key TYPE STANDARD TABLE OF ty_tree_key WITH KEY node_id .
+
+  data MT_NODE_RELATION type TT_NODE_RELATION .
+  data MO_TREE type ref to CL_GUI_ALV_TREE .
+
+  methods RENDER_TREE .
+  methods BUILD_NODE_RELATION
+    importing
+      !IT_HIERARCHY type TT_HIERARCHY .
 ENDCLASS.
 
 
 
 CLASS ZCL_ALV_TOOL IMPLEMENTATION.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Private Method ZCL_ALV_TOOL->BUILD_NODE_RELATION
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] IT_HIERARCHY                   TYPE        TT_HIERARCHY
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method BUILD_NODE_RELATION.
+
+  data: ls_map TYPE ty_node_relation,
+        lv_parent_found TYPE abap_bool.
+
+  ls_map = value #( node_id = 'ROOT' node_level = 0 parent = 'ROOT'  ).
+  APPEND ls_map TO mt_node_relation.
+
+  LOOP AT it_hierarchy ASSIGNING FIELD-SYMBOL(<data>).
+     lv_parent_found = abap_false.
+   LOOP AT mt_node_relation ASSIGNING FIELD-SYMBOL(<Node>) WHERE node_level = <data>-level - 1.
+      IF <data>-id CS <node>-node_id.
+        ls_map = value #( node_id = <data>-id node_level = <data>-level parent = <node>-node_id ).
+        APPEND ls_map to mt_node_relation.
+        lv_parent_found = abap_true.
+        EXIT.
+      ENDIF.
+   ENDLOOP.
+   IF lv_parent_found = abap_false.
+      ls_map = value #( node_id = <data>-id node_level = 1 parent = 'ROOT'  ).
+      APPEND ls_map TO mt_node_relation.
+   ENDIF.
+  ENDLOOP.
+  endmethod.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_ALV_TOOL->DRAW_TREE
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] IT_HIERARCHY                   TYPE        TT_HIERARCHY
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD draw_tree.
+    build_node_relation( it_hierarchy ).
+    render_tree( ).
+  ENDMETHOD.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -104,6 +190,31 @@ CLASS ZCL_ALV_TOOL IMPLEMENTATION.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Public Method ZCL_ALV_TOOL->GET_TEST_DATA
+* +-------------------------------------------------------------------------------------------------+
+* | [<-()] RT_TEST_DATA                   TYPE        TT_HIERARCHY
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method GET_TEST_DATA.
+    data(ls_node) = value ty_hierarchy( id = '00001' level = 1 description = 'Level 1 a').
+  APPEND ls_node TO rt_test_Data.
+  ls_node = value ty_hierarchy( id = '00002' level = 1 description = 'Level 1 b').
+  APPEND ls_node TO rt_test_Data.
+  ls_node = value ty_hierarchy( id = '0000100002' level = 2 description = 'Level 2 a').
+  APPEND ls_node TO rt_test_Data.
+  ls_node = value ty_hierarchy( id = '0000100003' level = 2 description = 'Level 2 b').
+  APPEND ls_node TO rt_test_Data.
+  ls_node = value ty_hierarchy( id = '0000200003' level = 2 description = 'Level 2 b1').
+  APPEND ls_node TO rt_test_Data.
+  ls_node = value ty_hierarchy( id = '0000100004' level = 2 description = 'Level 2 c').
+  APPEND ls_node TO rt_test_Data.
+  ls_node = value ty_hierarchy( id = '000010000300000003' level = 3 description = 'Level 3 a').
+  APPEND ls_node TO rt_test_Data.
+  ls_node = value ty_hierarchy( id = '000020000300000003' level = 3 description = 'Level 3 b').
+  APPEND ls_node TO rt_test_Data.
+  endmethod.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
 * | Instance Public Method ZCL_ALV_TOOL->GET_TREE
 * +-------------------------------------------------------------------------------------------------+
 * | [--->] IO_CONTAINER                   TYPE REF TO CL_GUI_CUSTOM_CONTAINER
@@ -128,5 +239,47 @@ CLASS ZCL_ALV_TOOL IMPLEMENTATION.
   IF sy-subrc <> 0.
     MESSAGE x208(00) WITH 'ERROR'.                          "#EC NOTEXT
   ENDIF.
+
+  mo_tree = ro_tree.
+  endmethod.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Private Method ZCL_ALV_TOOL->RENDER_TREE
+* +-------------------------------------------------------------------------------------------------+
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method RENDER_TREE.
+    DATA: p_relat_key TYPE lvc_nkey,
+        p_node_key  TYPE lvc_nkey,
+        lt_tree_key TYPE tt_tree_key,
+        ls_displayed TYPE ty_displayed_node.
+    CALL METHOD mo_tree->add_node
+    EXPORTING
+      i_relat_node_key = p_relat_key
+      i_relationship   = cl_gui_column_tree=>relat_last_child
+      i_node_text      = 'Hierarchy'
+    IMPORTING
+      e_new_node_key   = p_node_key.
+
+    data(ls_tree_key) = value ty_tree_key( node_id = 'ROOT' tree_key = p_node_key ).
+    APPEND ls_tree_key TO lt_tree_key.
+
+  "delete lt_node index 1.
+  LOOP AT mt_node_relation ASSIGNING FIELD-SYMBOL(<node1>).
+    ls_displayed-id = <node1>-node_id.
+    ls_displayed-text = <node1>-node_level.
+    READ TABLE lt_tree_key ASSIGNING FIELD-SYMBOL(<parent>) WITH KEY node_id = <node1>-parent.
+    CALL METHOD mo_tree->add_node
+    EXPORTING
+      i_relat_node_key = <parent>-tree_key
+      i_relationship   = cl_gui_column_tree=>relat_last_child
+      i_node_text      = conv #( <Node1>-node_id )
+      is_outtab_line   = ls_displayed
+    IMPORTING
+      e_new_node_key   = p_relat_key.
+
+    ls_tree_key = value #( node_id = <node1>-node_id tree_key = p_relat_key ).
+    APPEND ls_tree_key TO lt_tree_key.
+  ENDLOOP.
   endmethod.
 ENDCLASS.
