@@ -18,54 +18,60 @@ CLASS zcl_summer DEFINITION
       RETURNING
         VALUE(ro_instance) TYPE REF TO zcl_summer .
   PROTECTED SECTION.
-  PRIVATE SECTION.
+private section.
 
-    TYPES:
-      BEGIN OF ty_registered_bean,
+  types:
+    BEGIN OF ty_registered_bean,
         host_name     TYPE tadir-obj_name,
         host_ref      TYPE REF TO object,
         dependent_ref TYPE REF TO object,
       END OF ty_registered_bean .
-    TYPES:
-      tt_registered_bean TYPE STANDARD TABLE OF ty_registered_bean WITH KEY host_name .
+  types:
+    tt_registered_bean TYPE STANDARD TABLE OF ty_registered_bean WITH KEY host_name .
 
-    CONSTANTS cv_inject TYPE string VALUE '@Inject' ##NO_TEXT.
-    DATA mt_registered_bean TYPE tt_registered_bean .
-    CLASS-DATA so_instance TYPE REF TO zcl_summer .
+  constants CV_INJECT type STRING value '@Inject' ##NO_TEXT.
+  data MT_REGISTERED_BEAN type TT_REGISTERED_BEAN .
+  class-data SO_INSTANCE type ref to ZCL_SUMMER .
 
-    METHODS get_implementation_cls_name
-      IMPORTING
-        !iv_type           TYPE rs38l_typ
-      RETURNING
-        VALUE(rv_cls_name) TYPE tadir-obj_name .
-    METHODS get_class_list
-      IMPORTING
-        !iv_package          TYPE devclass
-      RETURNING
-        VALUE(rt_class_list) TYPE tt_class_list .
-    METHODS get_running_package
-      RETURNING
-        VALUE(rv_package) TYPE devclass .
-    METHODS scan_cls_with_inject
-      IMPORTING
-        !iv_cls             TYPE tadir-obj_name
-      RETURNING
-        VALUE(rs_injection) TYPE vseoattrib .
-    METHODS get_inited_instance
-      IMPORTING
-        !iv_cls          TYPE seoclsname
-      RETURNING
-        VALUE(ro_result) TYPE REF TO object .
-    METHODS get_setter_method_name
-      IMPORTING
-        !iv_attr_name    TYPE seocmpname
-      RETURNING
-        VALUE(rv_setter) TYPE seocmpname .
-    METHODS register_bean
-      IMPORTING
-        !iv_bean_name TYPE tadir-obj_name
-        !io_host      TYPE REF TO object
-        !io_dep       TYPE REF TO object .
+  methods CONNECT_BEAN
+    importing
+      !IV_SETTER type SEOCMPNAME
+      !IO_HOST type ref to OBJECT
+      !IO_DEP type ref to OBJECT .
+  methods GET_IMPLEMENTATION_CLS_NAME
+    importing
+      !IV_TYPE type RS38L_TYP
+    returning
+      value(RV_CLS_NAME) type TADIR-OBJ_NAME .
+  methods GET_CLASS_LIST
+    importing
+      !IV_PACKAGE type DEVCLASS
+    returning
+      value(RT_CLASS_LIST) type TT_CLASS_LIST .
+  methods GET_RUNNING_PACKAGE
+    returning
+      value(RV_PACKAGE) type DEVCLASS .
+  methods SCAN_CLS_WITH_INJECT
+    importing
+      !IV_CLS type TADIR-OBJ_NAME
+    returning
+      value(RS_INJECTION) type VSEOATTRIB .
+  methods GET_INITED_INSTANCE
+    importing
+      !IV_CLS type SEOCLSNAME
+    returning
+      value(RO_RESULT) type ref to OBJECT .
+  methods GET_SETTER_METHOD_NAME
+    importing
+      !IV_ATTR_NAME type SEOCMPNAME
+    returning
+      value(RV_SETTER) type SEOCMPNAME .
+  methods REGISTER_BEAN
+    importing
+      !IV_BEAN_NAME type TADIR-OBJ_NAME
+      !IO_HOST type ref to OBJECT
+      !IO_DEP type ref to OBJECT .
+  methods INIT .
 ENDCLASS.
 
 
@@ -79,23 +85,19 @@ CLASS ZCL_SUMMER IMPLEMENTATION.
 * +--------------------------------------------------------------------------------------</SIGNATURE>
   METHOD class_constructor.
     so_instance = NEW zcl_summer( ).
-    DATA(lv_package) = so_instance->get_running_package( ).
-    DATA(lt_cls) = so_instance->get_class_list( lv_package ).
-
-    LOOP AT lt_cls ASSIGNING FIELD-SYMBOL(<cls>).
-      DATA(ls_injection) = so_instance->scan_cls_with_inject( <cls> ).
-      CHECK ls_injection IS NOT INITIAL.
-      DATA(lv_cls) = so_instance->get_implementation_cls_name( ls_injection-type ).
-      DATA(lo_lamp) = so_instance->get_inited_instance( CONV #( lv_cls ) ).
-      DATA(lo_switch) = so_instance->get_inited_instance( ls_injection-clsname ).
-      DATA(lv_setter) = so_instance->get_setter_method_name( ls_injection-cmpname ).
-      so_instance->register_bean( iv_bean_name = CONV #( ls_injection-clsname ) io_host = lo_switch io_dep = lo_lamp ).
-
-      CALL METHOD lo_switch->(lv_setter)
-        EXPORTING
-          io_switchable = lo_lamp.
-    ENDLOOP.
+    so_instance->init( ).
   ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Private Method ZCL_SUMMER->CONNECT_BEAN
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] IV_SETTER                      TYPE        SEOCMPNAME
+* | [--->] IO_HOST                        TYPE REF TO OBJECT
+* | [--->] IO_DEP                         TYPE REF TO OBJECT
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method CONNECT_BEAN.
+  endmethod.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -183,6 +185,31 @@ CLASS ZCL_SUMMER IMPLEMENTATION.
     ASSERT sy-subrc = 0.
     rv_setter = 'SET_' && <match>.
   ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Instance Private Method ZCL_SUMMER->INIT
+* +-------------------------------------------------------------------------------------------------+
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method INIT.
+    DATA(lv_package) = so_instance->get_running_package( ).
+    DATA(lt_cls) = so_instance->get_class_list( lv_package ).
+
+    LOOP AT lt_cls ASSIGNING FIELD-SYMBOL(<cls>).
+      DATA(ls_injection) = so_instance->scan_cls_with_inject( <cls> ).
+      CHECK ls_injection IS NOT INITIAL.
+      DATA(lv_cls) = so_instance->get_implementation_cls_name( ls_injection-type ).
+      DATA(lo_dep) = so_instance->get_inited_instance( CONV #( lv_cls ) ).
+      DATA(lo_host) = so_instance->get_inited_instance( ls_injection-clsname ).
+      DATA(lv_setter) = so_instance->get_setter_method_name( ls_injection-cmpname ).
+
+      so_instance->register_bean( iv_bean_name = CONV #( ls_injection-clsname ) io_host = lo_host io_dep = lo_dep ).
+      so_instance->connect_bean( iv_setter = lv_setter io_host = lo_host io_dep = lo_dep ).
+*      CALL METHOD lo_host->(lv_setter)
+*        EXPORTING
+*          io_switchable = lo_dep.
+    ENDLOOP.
+  endmethod.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
