@@ -85,6 +85,7 @@ CLASS ZCL_SUMMER IMPLEMENTATION.
 * +-------------------------------------------------------------------------------------------------+
 * +--------------------------------------------------------------------------------------</SIGNATURE>
   METHOD class_constructor.
+* done at 2016-10-14 12:19PM  
     so_instance = NEW zcl_summer( ).
     so_instance->init( ).
   ENDMETHOD.
