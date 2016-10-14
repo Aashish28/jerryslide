@@ -36,6 +36,7 @@ private section.
   methods CONNECT_BEAN
     importing
       !IV_SETTER type SEOCMPNAME
+      !IV_BEAN_NAME type SEOCMPNAME
       !IO_HOST type ref to OBJECT
       !IO_DEP type ref to OBJECT .
   methods GET_IMPLEMENTATION_CLS_NAME
@@ -93,11 +94,33 @@ CLASS ZCL_SUMMER IMPLEMENTATION.
 * | Instance Private Method ZCL_SUMMER->CONNECT_BEAN
 * +-------------------------------------------------------------------------------------------------+
 * | [--->] IV_SETTER                      TYPE        SEOCMPNAME
+* | [--->] IV_BEAN_NAME                   TYPE        SEOCMPNAME
 * | [--->] IO_HOST                        TYPE REF TO OBJECT
 * | [--->] IO_DEP                         TYPE REF TO OBJECT
 * +--------------------------------------------------------------------------------------</SIGNATURE>
-  method CONNECT_BEAN.
-  endmethod.
+  METHOD connect_bean.
+    DATA: ptab TYPE abap_parmbind_tab.
+
+    DATA: ls_setter_info TYPE vseoparam.
+
+    SELECT SINGLE * INTO ls_setter_info FROM vseoparam WHERE
+        clsname = iv_bean_name AND cmpname = iv_setter.
+
+    ASSERT sy-subrc = 0.
+
+    ptab = VALUE #( ( name  = ls_setter_info-sconame
+                      kind  = cl_abap_objectdescr=>exporting
+                      value = REF #( io_dep ) )
+                     ).
+    TRY.
+        CALL METHOD io_host->(iv_setter)
+          PARAMETER-TABLE ptab.
+      CATCH cx_root INTO DATA(exc_ref).
+        WRITE: / exc_ref->get_text( ).
+        "MESSAGE exc_ref->get_text( ) TYPE 'E'.
+    ENDTRY.
+
+  ENDMETHOD.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -204,10 +227,8 @@ CLASS ZCL_SUMMER IMPLEMENTATION.
       DATA(lv_setter) = so_instance->get_setter_method_name( ls_injection-cmpname ).
 
       so_instance->register_bean( iv_bean_name = CONV #( ls_injection-clsname ) io_host = lo_host io_dep = lo_dep ).
-      so_instance->connect_bean( iv_setter = lv_setter io_host = lo_host io_dep = lo_dep ).
-*      CALL METHOD lo_host->(lv_setter)
-*        EXPORTING
-*          io_switchable = lo_dep.
+      so_instance->connect_bean( iv_setter = lv_setter iv_bean_name = ls_injection-clsname
+                                 io_host = lo_host io_dep = lo_dep ).
     ENDLOOP.
   endmethod.
 
