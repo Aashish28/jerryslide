@@ -1,15 +1,21 @@
-class ZCL_ORDER_TOOL definition
-  public
-  final
-  create public .
+CLASS zcl_order_tool DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods CLASS_CONSTRUCTOR .
-protected section.
-private section.
+    CLASS-METHODS class_constructor .
+    CLASS-METHODS get_oppt_item_prod_cat_id
+      IMPORTING
+        !iv_oppt_id           TYPE crmt_object_id DEFAULT '2036'
+        !iv_process_type      TYPE crmt_process_type_db DEFAULT 'OPPT'
+      RETURNING
+        VALUE(ev_prod_cat_id) TYPE crmt_prod_hierarchy .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 
-  class-data SO_CORE type ref to CL_CRM_BOL_CORE .
+    CLASS-DATA so_core TYPE REF TO cl_crm_bol_core .
 ENDCLASS.
 
 
@@ -21,57 +27,73 @@ CLASS ZCL_ORDER_TOOL IMPLEMENTATION.
 * | Static Public Method ZCL_ORDER_TOOL=>CLASS_CONSTRUCTOR
 * +-------------------------------------------------------------------------------------------------+
 * +--------------------------------------------------------------------------------------</SIGNATURE>
-  method CLASS_CONSTRUCTOR.
-    DATA: lo_core            TYPE REF TO cl_crm_bol_core,
-          lo_collection      TYPE REF TO if_bol_entity_col,
-          lv_view_name       TYPE crmt_view_name,
-          lv_query_name      TYPE crmt_ext_obj_name,
-          ls_parameter TYPE GENILT_QUERY_PARAMETERS,
-          lt_query_parameter TYPE GENILT_SELECTION_PARAMETER_TAB,
-          ls_query_parameter LIKE LINE OF lt_query_parameter,
-          lv_size            TYPE i.
+  METHOD class_constructor.
+
+    so_core = cl_crm_bol_core=>get_instance( ).
+    so_core->load_component_set( 'BT' ).
+
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Static Public Method ZCL_ORDER_TOOL=>GET_OPPT_ITEM_PROD_CAT_ID
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] IV_OPPT_ID                     TYPE        CRMT_OBJECT_ID (default ='2036')
+* | [--->] IV_PROCESS_TYPE                TYPE        CRMT_PROCESS_TYPE_DB (default ='OPPT')
+* | [<-()] EV_PROD_CAT_ID                 TYPE        CRMT_PROD_HIERARCHY
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD get_oppt_item_prod_cat_id.
+    DATA:
+      lo_collection      TYPE REF TO if_bol_entity_col,
+      lv_view_name       TYPE crmt_view_name,
+      lv_query_name      TYPE crmt_ext_obj_name,
+      ls_parameter       TYPE genilt_query_parameters,
+      lt_query_parameter TYPE genilt_selection_parameter_tab,
+      ls_query_parameter LIKE LINE OF lt_query_parameter.
 
     ls_query_parameter-attr_name = 'OBJECT_ID'.
-    ls_query_parameter-low = '2036'.
+    ls_query_parameter-low = iv_oppt_id.
     ls_query_parameter-option = 'EQ'.
     ls_query_parameter-sign = 'I'.
     APPEND ls_query_parameter TO lt_query_parameter.
 
     ls_query_parameter-attr_name = 'PROCESS_TYPE'.
-    ls_query_parameter-low = 'OPPT'.
+    ls_query_parameter-low = iv_process_type.
     ls_query_parameter-option = 'EQ'.
     ls_query_parameter-sign = 'I'.
     APPEND ls_query_parameter TO lt_query_parameter.
 
-    lo_core = cl_crm_bol_core=>get_instance( ).
-    lo_core->load_component_set( 'BT' ).
+    so_core = cl_crm_bol_core=>get_instance( ).
+    so_core->load_component_set( 'BT' ).
     lv_query_name = 'BTQ1Order'.
 
-    data(lo_result) = lo_core->dquery(
+    DATA(lo_result) = so_core->dquery(
         iv_query_name               = lv_query_name
         is_query_parameters         = ls_parameter
-        IT_SELECTION_PARAMETERS             = lt_query_parameter
+        it_selection_parameters             = lt_query_parameter
         iv_view_name                = lv_view_name ).
 
-    check LO_RESULT->size( ) = 1.
-    data(lo_order_result) = lo_result->get_first( ).
+    CHECK lo_result->size( ) = 1.
+    DATA(lo_order_result) = lo_result->get_first( ).
 
-    data(lo_bt_order) = lo_order_result->get_related_entity( 'BTADVS1Ord' ).
+    DATA(lo_bt_order) = lo_order_result->get_related_entity( 'BTADVS1Ord' ).
     CHECK lo_bt_order IS NOT INITIAL.
 
-    data(lo_header) = lo_bt_order->get_related_entity( 'BTOrderHeader' ).
+    DATA(lo_header) = lo_bt_order->get_related_entity( 'BTOrderHeader' ).
 
-    check lo_header IS NOT INITIAL.
+    CHECK lo_header IS NOT INITIAL.
 
-    data(lo_items) = lo_header->get_related_entities( IV_RELATION_NAME = 'BTHeaderItemsExt' ).
+    DATA(lo_items) = lo_header->get_related_entities( iv_relation_name = 'BTHeaderItemsExt' ).
     CHECK lo_items->size( ) = 1.
 
-    data(lo_item) = lo_items->get_first( ).
+    DATA(lo_item) = lo_items->get_first( ).
 
-    data(lo_admini) = lo_item->get_related_entity( 'BTItemsFirstLevel' ).
-    check lo_admini IS NOT INITIAL.
+    DATA(lo_admini) = lo_item->get_related_entity( 'BTItemsFirstLevel' ).
+    CHECK lo_admini IS NOT INITIAL.
 
-    data(lo_product) = lo_admini->get_related_entity( 'BTItemProductExt' ).
+    DATA(lo_product) = lo_admini->get_related_entity( 'BTItemProductExt' ).
 
-  endmethod.
+    CHECK lo_product IS NOT INITIAL.
+    EV_PROD_CAT_ID = lo_product->get_property_as_string( 'PROD_HIERARCHY' ).
+  ENDMETHOD.
 ENDCLASS.
