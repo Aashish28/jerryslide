@@ -1,17 +1,23 @@
-CLASS zcl_order_tool DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
+class ZCL_ORDER_TOOL definition
+  public
+  final
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    CLASS-METHODS class_constructor .
-    CLASS-METHODS get_oppt_item_prod_cat_id
-      IMPORTING
-        !iv_oppt_id           TYPE crmt_object_id DEFAULT '2036'
-        !iv_process_type      TYPE crmt_process_type_db DEFAULT 'OPPT'
-      RETURNING
-        VALUE(ev_prod_cat_id) TYPE crmt_prod_hierarchy .
+  class-methods CLASS_CONSTRUCTOR .
+  class-methods GET_OPPT_ITEM_PROD_CAT_ID
+    importing
+      !IV_OPPT_ID type CRMT_OBJECT_ID default '2036'
+      !IV_PROCESS_TYPE type CRMT_PROCESS_TYPE_DB default 'OPPT'
+    returning
+      value(EV_PROD_CAT_ID) type CRMT_PROD_HIERARCHY .
+  class-methods GET_OPPT_ITEM_PROD_CAT_ID2
+    importing
+      !IV_OPPT_ID type CRMT_OBJECT_ID default '2036'
+      !IV_PROCESS_TYPE type CRMT_PROCESS_TYPE_DB default 'OPPT'
+    returning
+      value(EV_PROD_CAT_ID) type CRMT_PROD_HIERARCHY .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -95,5 +101,20 @@ CLASS ZCL_ORDER_TOOL IMPLEMENTATION.
 
     CHECK lo_product IS NOT INITIAL.
     EV_PROD_CAT_ID = lo_product->get_property_as_string( 'PROD_HIERARCHY' ).
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Static Public Method ZCL_ORDER_TOOL=>GET_OPPT_ITEM_PROD_CAT_ID2
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] IV_OPPT_ID                     TYPE        CRMT_OBJECT_ID (default ='2036')
+* | [--->] IV_PROCESS_TYPE                TYPE        CRMT_PROCESS_TYPE_DB (default ='OPPT')
+* | [<-()] EV_PROD_CAT_ID                 TYPE        CRMT_PROD_HIERARCHY
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD GET_OPPT_ITEM_PROD_CAT_ID2.
+    select single prod_hierarchy into EV_PROD_CAT_ID FROM crmd_product_i as prod
+        INNER JOIN crmd_orderadm_i as item ON prod~guid = item~guid
+        INNER JOIN crmd_orderadm_h as order ON item~header = order~guid
+        WHERE order~object_id = iv_oppt_id and order~process_type = IV_PROCESS_TYPE.
   ENDMETHOD.
 ENDCLASS.
