@@ -14,3 +14,6 @@ call method cl_crm_orgman_services=>order_sale_resp_org_f4
 * 3. object name and return handling function module
  input is object name CRM_OBJECT_NAMES_DETERMINE
 CRM_ORDER_UPDATE_TABLES_DETERM      
+
+* field check handler assignment
+CRMC_FIELDCHECK
