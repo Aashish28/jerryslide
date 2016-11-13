@@ -111,7 +111,7 @@ CLASS zlcl_determine_test IMPLEMENTATION.
     DATA cv_ordered_prod TYPE crmt_ordered_prod.
     DATA ls_product_detail TYPE crmt_product_detail.
 
-    lv_ordered_product = 'NOT'.
+    lv_ordered_product = 'NOT_EXIST_PROD_IN_SYSTEM'.
 
     f_cut->crm_orderadm_i_prod_determ_ow(
       EXPORTING
