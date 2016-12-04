@@ -1,5 +1,5 @@
 REPORT zdoc_test.
-
+* probably written in 2014 Summer when I was responsible for CRM ticket processing 
 START-OF-SELECTION.
 
   DATA: lo_document TYPE REF TO cl_docx_document,

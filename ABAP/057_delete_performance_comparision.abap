@@ -1,5 +1,6 @@
 REPORT ZDELETE_COMPARE.
 
+* Jerry 2016-12-4 20:28PM - what is result ? :( on Aircraft from Frankfort to Beijing
 PARAMETERS: num type i OBLIGATORY DEFAULT 100.
 
 types: begin of ty_product,
