@@ -8,14 +8,11 @@
            result = iterated_value
            ... ) ...
  
-While VALUE and NEW expressions can include FOR expressions, REDUCE must include at least one FOR expression. You can use all kinds of FOR expressions in REDUCE:
+While VALUE and NEW expressions can include FOR expressions, REDUCE must include at 
+least one FOR expression. You can use all kinds of FOR expressions in REDUCE:
 with IN for iterating internal tables
 with UNTIL or WHILE for conditional iterations.
-*&---------------------------------------------------------------------*
-*& Report ZREDUCE
-*&---------------------------------------------------------------------*
-*&
-*&---------------------------------------------------------------------*
+
 REPORT ZREDUCE.
 
 DATA itab TYPE STANDARD TABLE OF i WITH EMPTY KEY.
