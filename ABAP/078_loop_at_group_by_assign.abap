@@ -21,6 +21,7 @@ LOOP AT flights INTO DATA(flight)
               ASSIGNING FIELD-SYMBOL(<group>).
   CLEAR members.
   LOOP AT GROUP <group> ASSIGNING FIELD-SYMBOL(<flight>).
+   " Jerry 2016-12-4 20:45PM at aircraft - this BASE is a new keyword: give the expression an initial value
     members = VALUE #( BASE members ( <flight> ) ).
   ENDLOOP.
   cl_demo_output=>write( members ).
