@@ -22,10 +22,15 @@ CLASS lcl_fibonacci IMPLEMENTATION.
                           WHEN n = 1
                             THEN VALUE #( ( |0| ) ( |1| ) )
                           ELSE
+                          " Jerry 2016-12-04 16:39PM at Frankfort -> Beijing
+                          " n = 2
+                          " fn1 = fibo(1): (0,1) - internal table
+                          " x = fn1[2] = 1
+                          " y = fn1[1] = 0
                             VALUE #( LET fn1 = fibonacci( n - 1 )
                                          x   = fn1[ lines( fn1 ) ]
                                          y   = fn1[ lines( fn1 ) - 1 ]
-                                      IN
+                                      IN " how to understand this LINES OF
                                       ( LINES OF fn1 ) ( x + y ) ) ).
   ENDMETHOD.
 ENDCLASS.
