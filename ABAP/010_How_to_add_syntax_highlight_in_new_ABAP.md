@@ -18,4 +18,5 @@
 
 * view
 * #CHECK
-* #SYSTEM_LANGUAGE - workaround, actually it is not a keyword - Jerry 2016-12-4 20:54PM from Germany to China - the highlight for word with # does not work!
+* #SYSTEM_LANGUAGE - workaround, actually it is not a keyword - Jerry 2016-12-4 20:54PM from Germany to China - the highlight for word with # does not work! Neither for $projection.
+* but sylangu can work 
