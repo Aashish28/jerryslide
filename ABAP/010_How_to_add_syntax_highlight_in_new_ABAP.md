@@ -8,6 +8,7 @@
 ## new keyword needs to be added
 
 * COND
-* VALUE
 * LET
 * THEN
+* THROW
+* CONV
