@@ -1,3 +1,4 @@
+* this class is written on 2016 Spring festival eve
 CLASS cl_crm_task_userstatus_tool DEFINITION
   PUBLIC
   FINAL
