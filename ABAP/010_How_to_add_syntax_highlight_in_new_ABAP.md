@@ -20,3 +20,16 @@
 * #CHECK
 * #SYSTEM_LANGUAGE - workaround, actually it is not a keyword - Jerry 2016-12-4 20:54PM from Germany to China - the highlight for word with # does not work! Neither for $projection.
 * but sylangu can work 
+* 2016-12-4 21:06PM solution found. Please refer to following xml configuration for example
+```xml
+		<dict>
+			<key>comment</key>
+			<string>--==[[ Jerry's CDS view related ]]==--</string>				
+			<key>match</key>
+			<string>(#CHECK)</string>
+			<key>name</key>
+			<string>constant.character.escape.abp</string>
+		</dict>   
+```
+
+
