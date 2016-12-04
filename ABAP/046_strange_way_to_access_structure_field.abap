@@ -23,7 +23,8 @@ START-OF-SELECTION.
      DATA(ls1) = value ty_structure( name = 'Jerry' score = 100 skill = 1 rank = 1 ).
      DATA(ls2) = value ty_structure2( name = 'Sean' score = 101 skill = 2 rank = 1 ).
 
-     "DATA(lv1) = ls1(3). Accessing part of a field is not allowed for internal tables, deep structures, or references.
+     "DATA(lv1) = ls1(3). Accessing part of a field is not allowed for internal tables, 
+     " deep structures, or references.
      DATA(lv1) = ls2(3).
      WRITE: / lv1.
      DATA(lv2) = ls2(4).
