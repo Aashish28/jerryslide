@@ -18,7 +18,7 @@ cl_demo_output=>display(
     FOR i = 1 WHILE i <= 100 (
 " COND string: line type is string
 " LET: define local variable r3 and r5 - local auxiliary fields. 
-      COND string( LET r3 = i MOD 3
+      COND string( LET r3 = i MOD 3 
                        r5 = i MOD 5 IN
                    WHEN r3 = 0 AND r5 = 0 THEN |FIZZBUZZ|
                    WHEN r3 = 0            THEN |FIZZ|
