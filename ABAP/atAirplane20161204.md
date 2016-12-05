@@ -22,4 +22,5 @@
 23:42 - 43%
 
 # in Beijing to Chengdu
-9:27AM 93% 
+ 9:27 93% 
+10:36 89% - delayed again!!!!
