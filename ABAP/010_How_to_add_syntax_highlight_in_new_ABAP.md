@@ -16,7 +16,7 @@
 * CAST
 * FIND
 * ASSERT
-
+* RIGHT DELETING TRAILING
 ## new keywords for CDS view
 
 * view
