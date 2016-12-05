@@ -20,3 +20,6 @@
 21:18 - 46%, super is coming
 22:28 - 45% 
 23:42 - 43%
+
+# in Beijing to Chengdu
+9:27AM 93% 

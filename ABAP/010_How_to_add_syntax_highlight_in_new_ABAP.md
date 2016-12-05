@@ -13,6 +13,7 @@
 * THROW
 * CONV
 * BASE
+* CAST
 
 ## new keywords for CDS view
 

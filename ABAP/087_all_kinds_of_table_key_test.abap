@@ -34,6 +34,9 @@ READ TABLE lt_table2 TRANSPORTING NO FIELDS WITH KEY score = 20.
 READ TABLE lt_table2 TRANSPORTING NO FIELDS WITH KEY text = 'Jerry'.
 
 "Syntax error
+" Jerry 2016-12-4 11:44PM - it seems *READ XXXX WITH TABLE KEY* can only work if explicit table key is defined
+" using keyword WITH UNIQUE KEY or WITH NON-UNIQUE KEY
+
 "READ TABLE lt_table2 TRANSPORTING NO FIELDS WITH TABLE KEY index = 1.
 
 "syntax error
