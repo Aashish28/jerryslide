@@ -1,3 +1,5 @@
+" I remember this class is written for Li Ke in year 2012 but actually is not needed
+* from airplane Beijing to Chengdu on 2016-12-5 9:34AM 
 class ZCL_RANDOM_GENERATOR definition
   public
   final
