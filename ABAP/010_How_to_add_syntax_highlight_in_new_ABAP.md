@@ -14,6 +14,8 @@
 * CONV
 * BASE
 * CAST
+* FIND
+* ASSERT
 
 ## new keywords for CDS view
 
