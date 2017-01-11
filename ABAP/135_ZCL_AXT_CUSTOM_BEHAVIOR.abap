@@ -44,7 +44,7 @@ CLASS ZCL_AXT_CUSTOM_BEHAVIOR IMPLEMENTATION.
 * | [<-()] RT_DATATYPES                   TYPE        AXTT_FIELD_DATA_TYPE
 * +--------------------------------------------------------------------------------------</SIGNATURE>
   METHOD IF_AXT_BEHAVIOR_HANDLER~GET_COMPATIBLE_DATATYPES.
-    "APPEND 'LONG_TEXT' TO rt_datatypes.
+    APPEND 'CHAR' TO rt_datatypes.
     APPEND 'STRING' TO rt_datatypes.
   ENDMETHOD.                    "IF_AXT_BEHAVIOR_HANDLER~GET_COMPATIBLE_DATATYPES
 
