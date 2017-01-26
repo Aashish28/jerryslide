@@ -128,6 +128,10 @@ START-OF-SELECTION.
       APPEND source_line TO lt_source..
     ENDIF.
   ENDLOOP.
+* insert setter
+
+  APPEND 'data MO_PREEXIT type ref to IF_PREEXIT .' TO lt_source.
+  APPEND 'methods SET_PREEXIT importing !IO_PREEXIT type ref to IF_PREEXIT .' TO lt_source.
   CONCATENATE 'CLASS' cifkey 'IMPLEMENTATION' INTO l_string SEPARATED BY space.
   LOOP AT pool_source
     FROM tabix
@@ -154,6 +158,10 @@ START-OF-SELECTION.
       APPEND source_line TO lt_source..
     ENDLOOP.
   ENDLOOP.
+
+* insert set_preexit
+
+ APPEND 'method set_preexit.  mo_preexit = IO_PREEXIT. endmethod.' TO lt_source.
   LOOP AT pool_source
     FROM tabix
     INTO source_line.
