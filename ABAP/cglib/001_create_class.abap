@@ -110,6 +110,7 @@ START-OF-SELECTION.
     ENDIF.
 
   ENDLOOP.
+  APPEND 'methods SET_PREEXIT importing !IO_PREEXIT type ref to IF_PREEXIT .' TO lt_source.
 
   READ REPORT clsref->protected_section
     INTO source.
@@ -131,7 +132,7 @@ START-OF-SELECTION.
 * insert setter
 
   APPEND 'data MO_PREEXIT type ref to IF_PREEXIT .' TO lt_source.
-  APPEND 'methods SET_PREEXIT importing !IO_PREEXIT type ref to IF_PREEXIT .' TO lt_source.
+
   CONCATENATE 'CLASS' cifkey 'IMPLEMENTATION' INTO l_string SEPARATED BY space.
   LOOP AT pool_source
     FROM tabix
@@ -153,15 +154,19 @@ START-OF-SELECTION.
     READ REPORT include-incname
       INTO source.
 
+* injext preexit and post exit
+    INSERT 'mo_preexit->execute( ).' INTO source INDEX 2.
+
     LOOP AT source
       INTO source_line.
       APPEND source_line TO lt_source..
     ENDLOOP.
+
   ENDLOOP.
 
 * insert set_preexit
 
- APPEND 'method set_preexit.  mo_preexit = IO_PREEXIT. endmethod.' TO lt_source.
+  APPEND 'method set_preexit.  mo_preexit = IO_PREEXIT. endmethod.' TO lt_source.
   LOOP AT pool_source
     FROM tabix
     INTO source_line.
@@ -180,7 +185,6 @@ START-OF-SELECTION.
         EXIT.
       ENDLOOP.
 
-
       GENERATE SUBROUTINE POOL lt_source NAME DATA(prog).
       WRITE: / sy-subrc.
 
@@ -188,7 +192,11 @@ START-OF-SELECTION.
       DATA oref TYPE REF TO object.
       CREATE OBJECT oref TYPE (class).
       "data(lv_class_name) = 'ZCL_JAVA_CGLIB_SUB'.
-      data(lo_class) = cast ZCL_JAVA_CGLIB( oref ).
+      DATA(lo_class) = CAST zcl_java_cglib( oref ).
+
+      CALL METHOD lo_class->('SET_PREEXIT')
+        EXPORTING
+          io_preexit = NEW zcl_jerry_preexit( ).
       lo_class->greet( ).
 
     CATCH cx_root INTO DATA(cx_root).
