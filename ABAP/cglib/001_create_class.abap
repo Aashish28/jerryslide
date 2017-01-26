@@ -153,12 +153,19 @@ START-OF-SELECTION.
         DELETE lt_source INDEX ( sy-tabix + 1 ).
         EXIT.
       ENDLOOP.
+
+      LOOP AT lt_source ASSIGNING FIELD-SYMBOL(<source1>) WHERE table_line CS 'ZCL_JAVA_CGLIB'.
+        REPLACE 'ZCL_JAVA_CGLIB' IN <source1> with 'ZCL_JAVA_CGLIB_SUB'.
+      ENDLOOP.
       GENERATE SUBROUTINE POOL lt_source NAME DATA(prog).
       WRITE: / sy-subrc.
 
-      DATA(class) = `\PROGRAM=` && prog && `\CLASS=ZCL_JAVA_CGLIB`.
+      DATA(class) = `\PROGRAM=` && prog && `\CLASS=ZCL_JAVA_CGLIB_SUB`.
       DATA oref TYPE REF TO object.
       CREATE OBJECT oref TYPE (class).
+      "data(lo_class) = cast ZCL_JAVA_CGLIB( oref ).
+      "lo_class->greet( ).
+
 
     CATCH cx_root INTO DATA(cx_root).
       WRITE: / cx_root->get_text( ).
