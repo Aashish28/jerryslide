@@ -91,11 +91,24 @@ START-OF-SELECTION.
 
   READ REPORT clsref->public_section
     INTO source.
-  LOOP AT source
-    INTO source_line.
-    IF source_line NS '*"*'.
-      APPEND source_line TO lt_source.
+  LOOP AT source ASSIGNING FIELD-SYMBOL(<source_line>).
+
+    IF <source_line> NS '*"*'.
+      FIND REGEX '.*methods.*\.' IN <source_line>
+     "MATCH OFFSET moff
+     MATCH LENGTH DATA(lv_len).
+
+      IF sy-subrc = 0.
+
+        lv_len = lv_len - 1.
+        <source_line> = <source_line>+0(lv_len).
+
+        CONCATENATE <source_line> 'redefinition' '.' INTO <source_line> SEPARATED BY space.
+      ENDIF.
+
+      APPEND <source_line> TO lt_source.
     ENDIF.
+
   ENDLOOP.
 
   READ REPORT clsref->protected_section
@@ -149,23 +162,26 @@ START-OF-SELECTION.
     ENDIF.
   ENDLOOP.
   TRY.
+      LOOP AT lt_source ASSIGNING FIELD-SYMBOL(<source1>) WHERE table_line CS 'ZCL_JAVA_CGLIB'.
+        REPLACE 'ZCL_JAVA_CGLIB' IN <source1> WITH 'ZCL_JAVA_CGLIB_SUB'.
+      ENDLOOP.
+
       LOOP AT lt_source ASSIGNING FIELD-SYMBOL(<source>) WHERE table_line CS 'ZCL_JAVA_CGLIB'.
         DELETE lt_source INDEX ( sy-tabix + 1 ).
+        INSERT 'inheriting from ZCL_JAVA_CGLIB' INTO lt_source INDEX ( sy-tabix + 1 ).
         EXIT.
       ENDLOOP.
 
-      LOOP AT lt_source ASSIGNING FIELD-SYMBOL(<source1>) WHERE table_line CS 'ZCL_JAVA_CGLIB'.
-        REPLACE 'ZCL_JAVA_CGLIB' IN <source1> with 'ZCL_JAVA_CGLIB_SUB'.
-      ENDLOOP.
+
       GENERATE SUBROUTINE POOL lt_source NAME DATA(prog).
       WRITE: / sy-subrc.
 
       DATA(class) = `\PROGRAM=` && prog && `\CLASS=ZCL_JAVA_CGLIB_SUB`.
       DATA oref TYPE REF TO object.
       CREATE OBJECT oref TYPE (class).
-      "data(lo_class) = cast ZCL_JAVA_CGLIB( oref ).
-      "lo_class->greet( ).
-
+      "data(lv_class_name) = 'ZCL_JAVA_CGLIB_SUB'.
+      data(lo_class) = cast ZCL_JAVA_CGLIB( oref ).
+      lo_class->greet( ).
 
     CATCH cx_root INTO DATA(cx_root).
       WRITE: / cx_root->get_text( ).
