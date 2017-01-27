@@ -46,6 +46,8 @@ REPORT ZDYANMIC.
         CV_IMPLEMENTATION TYPE SEOR_IMPLEMENTINGS_R,
         ls_source_code     TYPE seo_method_source,
         lt_methods TYPE SEOO_METHODS_R,
+        lt_parameters TYPE SEOS_PARAMETERS_R,
+        ls_parameter LIKE LINE OF lt_parameters,
         ls_method LIKE LINE OF lt_methods.
 
   ls_method-clsname = lv_classname.
@@ -53,6 +55,21 @@ REPORT ZDYANMIC.
   LS_METHOD-state = 1. "implemented
   ls_method-exposure = 2. "public
   APPEND LS_METHOD TO LT_METHODS.
+
+  ls_parameter-clsname = lv_classname.
+  ls_parameter-cmpname = 'CONSTRUCTOR'.
+  ls_parameter-version = 1.
+  ls_parameter-descript = 'Jerry'.
+  ls_parameter-type = 'String'.
+  ls_parameter-SCONAME = 'IO_base'.
+  ls_parameter-CMPTYPE = 1. "METHOD
+  ls_parameter-mtdtype = 0. "METHOD
+  ls_parameter-pardecltyp = 0. "IMPORTING
+  ls_parameter-parpasstyp = 1. "pass by reference
+  ls_parameter-typtype = 3. "type ref to
+  "ls_parameter- SCOTYPE = 0. "PARAMETER
+  append ls_parameter TO lt_parameters.
+
   CALL FUNCTION 'SEO_CLASS_CREATE_COMPLETE'
     EXPORTING
       devclass                   = '$TMP'
@@ -66,6 +83,7 @@ REPORT ZDYANMIC.
     CHANGING
       class                      = ls_vseoclass
       methods =  lt_methods
+      parameters = lt_parameters
       implementings              = lt_imp_if
     EXCEPTIONS
       existing                   = 1
