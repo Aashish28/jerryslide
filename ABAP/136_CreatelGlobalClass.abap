@@ -36,12 +36,23 @@ REPORT ZDYANMIC.
 
      APPEND ls_method_source TO lt_methods_source.
 
+     ls_method_source-cpdname = 'CONSTRUCTOR'.
+     APPEND 'BREAK-POINT.' TO ls_method_source-source.
+     APPEND ls_method_source TO lt_methods_source.
+
   DATA:
         lt_implementation  TYPE seop_source_string,
         ls_mtdkey          TYPE seocpdkey,
         CV_IMPLEMENTATION TYPE SEOR_IMPLEMENTINGS_R,
-        ls_source_code     TYPE seo_method_source.
+        ls_source_code     TYPE seo_method_source,
+        lt_methods TYPE SEOO_METHODS_R,
+        ls_method LIKE LINE OF lt_methods.
 
+  ls_method-clsname = lv_classname.
+  ls_method-cmpname = 'CONSTRUCTOR'.
+  LS_METHOD-state = 1. "implemented
+  ls_method-exposure = 2. "public
+  APPEND LS_METHOD TO LT_METHODS.
   CALL FUNCTION 'SEO_CLASS_CREATE_COMPLETE'
     EXPORTING
       devclass                   = '$TMP'
@@ -54,6 +65,7 @@ REPORT ZDYANMIC.
       suppress_dialog            = abap_true
     CHANGING
       class                      = ls_vseoclass
+      methods =  lt_methods
       implementings              = lt_imp_if
     EXCEPTIONS
       existing                   = 1
