@@ -32,12 +32,13 @@ REPORT ZDYANMIC.
      CLEAR: ls_method_source.
      datA: lv_name type string.
      ls_method_source-cpdname = 'IF_HELLOWORLD~PRINT'.
-     APPEND '  DATA  lo_as_badi_extension TYPE STRING.'       TO ls_method_source-source.         "#EC NOTEXT
+     APPEND '  mo_origin->print( ).'       TO ls_method_source-source.         "#EC NOTEXT
 
      APPEND ls_method_source TO lt_methods_source.
 
+          clear: ls_method_source.
      ls_method_source-cpdname = 'CONSTRUCTOR'.
-     APPEND 'BREAK-POINT.' TO ls_method_source-source.
+     APPEND 'mo_origin = io_origin.' TO ls_method_source-source.
      APPEND ls_method_source TO lt_methods_source.
 
   DATA:
@@ -47,6 +48,8 @@ REPORT ZDYANMIC.
         ls_source_code     TYPE seo_method_source,
         lt_methods TYPE SEOO_METHODS_R,
         lt_parameters TYPE SEOS_PARAMETERS_R,
+        lt_attribute TYPE SEOO_ATTRIBUTES_R,
+        ls_attribute LIKE LINE OF lt_attribute,
         ls_parameter LIKE LINE OF lt_parameters,
         ls_method LIKE LINE OF lt_methods.
 
@@ -60,8 +63,8 @@ REPORT ZDYANMIC.
   ls_parameter-cmpname = 'CONSTRUCTOR'.
   ls_parameter-version = 1.
   ls_parameter-descript = 'Jerry'.
-  ls_parameter-type = 'String'.
-  ls_parameter-SCONAME = 'IO_base'.
+  ls_parameter-type = 'IF_HELLOWORLD'.
+  ls_parameter-SCONAME = 'IO_ORIGIN'.
   ls_parameter-CMPTYPE = 1. "METHOD
   ls_parameter-mtdtype = 0. "METHOD
   ls_parameter-pardecltyp = 0. "IMPORTING
@@ -69,6 +72,15 @@ REPORT ZDYANMIC.
   ls_parameter-typtype = 3. "type ref to
   "ls_parameter- SCOTYPE = 0. "PARAMETER
   append ls_parameter TO lt_parameters.
+
+  ls_attribute-clsname = lv_classname.
+  ls_attribute-cmpname = 'MO_ORIGIN'.
+  ls_attribute-state = 1.
+  ls_attribute-attdecltyp = 0.
+  ls_attribute-attexpvirt = 0. "private
+  ls_attribute-typtype = 3. "type ref to
+  ls_attribute-type = 'IF_HELLOWORLD'.
+  APPEND ls_attribute TO lt_attribute.
 
   CALL FUNCTION 'SEO_CLASS_CREATE_COMPLETE'
     EXPORTING
@@ -85,6 +97,7 @@ REPORT ZDYANMIC.
       methods =  lt_methods
       parameters = lt_parameters
       implementings              = lt_imp_if
+      attributes = lt_attribute
     EXCEPTIONS
       existing                   = 1
       is_interface               = 2
