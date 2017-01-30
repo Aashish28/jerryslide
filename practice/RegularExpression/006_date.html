@@ -1,8 +1,21 @@
 <html>
 <script>
-var reg = /^(\d{1,4})(-|\/|\.)(\d{1,2})(-|\/|\.)(\d{1,2})$/;
+/*var reg = /^(\d{1,4})(-|\/|\.)(\d{1,2})(-|\/|\.)(\d{1,2})$/;
 ///^(\\d{1,4})(-|\\/)(\\d{1,2})\\2(\\d{1,2})$/;
 var date = ['2016.01.23', "2016-01-23", "2016/01/23", "19/12/2012"];
+
+for( var i = 0; i < date.length; i++){
+	var r = date[i].match(reg);             
+	if(r == null)
+		console.log('Date format error!');
+	else
+		console.log("Date format ok!");
+}*/
+
+
+var reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$/;
+///^(\\d{1,4})(-|\\/)(\\d{1,2})\\2(\\d{1,2})$/;
+var date = ["1233pgRR", "Rpg123Tes", "asdfR12345"];
 
 for( var i = 0; i < date.length; i++){
 	var r = date[i].match(reg);             
