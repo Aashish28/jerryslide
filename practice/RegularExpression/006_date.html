@@ -12,10 +12,22 @@ for( var i = 0; i < date.length; i++){
 		console.log("Date format ok!");
 }*/
 
-
+/*
 var reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$/;
 ///^(\\d{1,4})(-|\\/)(\\d{1,2})\\2(\\d{1,2})$/;
 var date = ["1233pgRR", "Rpg123Tes", "asdfR12345"];
+
+for( var i = 0; i < date.length; i++){
+	var r = date[i].match(reg);             
+	if(r == null)
+		console.log('Date format error!');
+	else
+		console.log("Date format ok!");
+}*/
+
+var reg = /^[\\u4e00-\\u9fa5]{0,}$/;
+///^(\\d{1,4})(-|\\/)(\\d{1,2})\\2(\\d{1,2})$/;
+var date = ["1233pgRR", "中文", "asdfR12345"];
 
 for( var i = 0; i < date.length; i++){
 	var r = date[i].match(reg);             
