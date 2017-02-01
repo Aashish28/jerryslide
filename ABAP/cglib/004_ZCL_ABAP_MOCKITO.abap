@@ -27,48 +27,59 @@ CLASS zcl_abap_mockito DEFINITION
       RETURNING
         VALUE(ro_instance) TYPE REF TO object .
   PROTECTED SECTION.
-  PRIVATE SECTION.
+private section.
 
-    TYPES:
-      BEGIN OF ty_method,
+  types:
+    BEGIN OF ty_method,
         name     TYPE string,
         argument TYPE string,
         result   TYPE string,
       END OF ty_method .
-    TYPES:
-      tt_method TYPE STANDARD TABLE OF ty_method WITH KEY name argument .
-    TYPES:
-      BEGIN OF ty_mocked_data,
+  types:
+    tt_method TYPE STANDARD TABLE OF ty_method WITH KEY name argument .
+  types:
+    begin of ty_argu_info,
+              import_name TYPE string,
+              return_name TYPE string,
+           end of ty_argu_info .
+  types:
+    BEGIN OF ty_mocked_data,
         cls_instance TYPE REF TO object,
         mock_methods TYPE tt_method,
       END OF ty_mocked_data .
-    TYPES:
-      tt_mocked_data TYPE STANDARD TABLE OF ty_mocked_data WITH KEY cls_instance .
-    TYPES:
-      BEGIN OF ty_to_be_mocked,
+  types:
+    tt_mocked_data TYPE STANDARD TABLE OF ty_mocked_data WITH KEY cls_instance .
+  types:
+    BEGIN OF ty_to_be_mocked,
         cls_instance TYPE REF TO object,
         method       TYPE string,
         argument     TYPE string,
       END OF ty_to_be_mocked .
 
-    CLASS-DATA so_instance TYPE REF TO zcl_abap_mockito .
-    DATA mt_mocked_data TYPE tt_mocked_data .
-    DATA ms_method_to_be_mocked TYPE ty_to_be_mocked .
-    CLASS-DATA mt_source TYPE seop_source_string .
+  class-data SO_INSTANCE type ref to ZCL_ABAP_MOCKITO .
+  data MT_MOCKED_DATA type TT_MOCKED_DATA .
+  data MS_METHOD_TO_BE_MOCKED type TY_TO_BE_MOCKED .
+  class-data MT_SOURCE type SEOP_SOURCE_STRING .
 
-    METHODS log_stub
-      IMPORTING
-        !io_cls         TYPE REF TO object
-        !iv_method_name TYPE string
-        !iv_argument    TYPE string .
-    CLASS-METHODS fill_source_code
-      IMPORTING
-        !iv_class_name TYPE string .
-    CLASS-METHODS generate_stub
-      IMPORTING
-        !iv_class_name TYPE string
-      RETURNING
-        VALUE(ro_stub) TYPE REF TO object .
+  class-methods GET_ARGU_INFO
+    importing
+      !IV_CLASS_NAME type STRING
+      !IV_METHOD_NAME type SEOCMPNAME
+    returning
+      value(RS_ARGU_INFO) type TY_ARGU_INFO .
+  methods LOG_STUB
+    importing
+      !IO_CLS type ref to OBJECT
+      !IV_METHOD_NAME type STRING
+      !IV_ARGUMENT type STRING .
+  class-methods FILL_SOURCE_CODE
+    importing
+      !IV_CLASS_NAME type STRING .
+  class-methods GENERATE_STUB
+    importing
+      !IV_CLASS_NAME type STRING
+    returning
+      value(RO_STUB) type ref to OBJECT .
 ENDCLASS.
 
 
@@ -109,11 +120,13 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
 
     LOOP AT lt_public_method ASSIGNING FIELD-SYMBOL(<method1>).
       APPEND |method { <method1> }.| TO mt_source.
+      data(ls_argu_info) = get_argu_info( iv_class_name = iv_class_name
+                                          IV_METHOD_NAME = <method1> ).
 
-      APPEND 'rv_book_name = zcl_abap_mockito=>when( )->get_mocked_data(' TO mt_source.
+      APPEND |{ ls_argu_info-return_name } = zcl_abap_mockito=>when( )->get_mocked_data(| TO mt_source.
       APPEND 'io_cls = me' TO mt_source.
       APPEND |iv_method_name = '{ <method1> }'| TO mt_source.
-      APPEND ' IV_argument = conv #( iv_index )' TO mt_source.
+      APPEND | iv_argument = conv #( { ls_argu_info-import_name } )| TO mt_source.
       APPEND ').' TO mt_source.
       APPEND 'endmethod.' TO mt_source.
     ENDLOOP.
@@ -139,6 +152,29 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
         WRITE: / cx_root->get_text( ).
     ENDTRY.
   ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Static Private Method ZCL_ABAP_MOCKITO=>GET_ARGU_INFO
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] IV_CLASS_NAME                  TYPE        STRING
+* | [--->] IV_METHOD_NAME                 TYPE        SEOCMPNAME
+* | [<-()] RS_ARGU_INFO                   TYPE        TY_ARGU_INFO
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method GET_ARGU_INFO.
+    DATA: lt_argu TYPE TABLE OF SEOSUBCODF.
+
+  SELECT * INTO TABLE lt_argu FROM SEOSUBCODF WHERE clsname = iv_class_name
+     and cmpname = IV_METHOD_NAME.
+
+  READ TABLE lt_argu ASSIGNING FIELD-SYMBOL(<importing>) WITH KEY pardecltyp = 0.
+  CHECK sy-subrc = 0.
+  rs_argu_info-import_name = <importing>-sconame.
+
+  READ TABLE lt_argu ASSIGNING FIELD-SYMBOL(<returning>) WITH KEY pardecltyp = 3.
+  CHECK sy-subrc = 0.
+  rs_argu_info-return_name = <returning>-sconame.
+  endmethod.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
