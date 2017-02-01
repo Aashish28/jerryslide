@@ -1,74 +1,74 @@
-class ZCL_ABAP_MOCKITO definition
-  public
-  final
-  create private .
+CLASS zcl_abap_mockito DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PRIVATE .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods CLASS_CONSTRUCTOR .
-  methods GET_MOCKED_DATA
-    importing
-      !IO_CLS type ref to OBJECT
-      !IV_METHOD_NAME type STRING
-      !IV_ARGUMENT type STRING
-    returning
-      value(RV_RESULT) type STRING .
-  class-methods WHEN
-    importing
-      !IO_DUMMY type ANY optional
-    returning
-      value(RO_INSTANCE) type ref to ZCL_ABAP_MOCKITO .
-  methods THEN_RETURN
-    importing
-      !IV_RETURN type STRING .
-  class-methods MOCK
-    importing
-      !IV_CLASS_NAME type STRING
-    returning
-      value(RO_INSTANCE) type ref to OBJECT .
-protected section.
-private section.
+    CLASS-METHODS class_constructor .
+    METHODS get_mocked_data
+      IMPORTING
+        !io_cls          TYPE REF TO object
+        !iv_method_name  TYPE string
+        !iv_argument     TYPE string
+      RETURNING
+        VALUE(rv_result) TYPE string .
+    CLASS-METHODS when
+      IMPORTING
+        !io_dummy          TYPE any OPTIONAL
+      RETURNING
+        VALUE(ro_instance) TYPE REF TO zcl_abap_mockito .
+    METHODS then_return
+      IMPORTING
+        !iv_return TYPE string .
+    CLASS-METHODS mock
+      IMPORTING
+        !iv_class_name     TYPE string
+      RETURNING
+        VALUE(ro_instance) TYPE REF TO object .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 
-  types:
-    begin of ty_method,
-            name type string,
-            argument type string,
-            result type string,
-      end of ty_method .
-  types:
-    tt_method type STANDARD TABLE OF ty_method with key name argument .
-  types:
-    BEGIN OF ty_mocked_data,
-           cls_instance TYPE REF TO object,
-           mock_methods type tt_method,
-        end of tY_mocked_data .
-  types:
-    tt_mocked_data type STANDARD TABLE OF ty_mocked_data with key cls_instance .
-  types:
-    BEGIN OF ty_to_be_mocked,
-     cls_instance TYPE REF TO object,
-     method TYPE string,
-     argument TYPE string,
-     end of ty_to_be_mocked .
+    TYPES:
+      BEGIN OF ty_method,
+        name     TYPE string,
+        argument TYPE string,
+        result   TYPE string,
+      END OF ty_method .
+    TYPES:
+      tt_method TYPE STANDARD TABLE OF ty_method WITH KEY name argument .
+    TYPES:
+      BEGIN OF ty_mocked_data,
+        cls_instance TYPE REF TO object,
+        mock_methods TYPE tt_method,
+      END OF ty_mocked_data .
+    TYPES:
+      tt_mocked_data TYPE STANDARD TABLE OF ty_mocked_data WITH KEY cls_instance .
+    TYPES:
+      BEGIN OF ty_to_be_mocked,
+        cls_instance TYPE REF TO object,
+        method       TYPE string,
+        argument     TYPE string,
+      END OF ty_to_be_mocked .
 
-  class-data SO_INSTANCE type ref to ZCL_ABAP_MOCKITO .
-  data MT_MOCKED_DATA type TT_MOCKED_DATA .
-  data MS_METHOD_TO_BE_MOCKED type TY_TO_BE_MOCKED .
-  class-data MT_SOURCE type SEOP_SOURCE_STRING .
+    CLASS-DATA so_instance TYPE REF TO zcl_abap_mockito .
+    DATA mt_mocked_data TYPE tt_mocked_data .
+    DATA ms_method_to_be_mocked TYPE ty_to_be_mocked .
+    CLASS-DATA mt_source TYPE seop_source_string .
 
-  methods LOG_STUB
-    importing
-      !IO_CLS type ref to OBJECT
-      !IV_METHOD_NAME type STRING
-      !IV_ARGUMENT type STRING .
-  class-methods FILL_SOURCE_CODE
-    importing
-      !IV_CLASS_NAME type STRING .
-  class-methods GENERATE_STUB
-    importing
-      !IV_CLASS_NAME type STRING
-    returning
-      value(RO_STUB) type ref to OBJECT .
+    METHODS log_stub
+      IMPORTING
+        !io_cls         TYPE REF TO object
+        !iv_method_name TYPE string
+        !iv_argument    TYPE string .
+    CLASS-METHODS fill_source_code
+      IMPORTING
+        !iv_class_name TYPE string .
+    CLASS-METHODS generate_stub
+      IMPORTING
+        !iv_class_name TYPE string
+      RETURNING
+        VALUE(ro_stub) TYPE REF TO object .
 ENDCLASS.
 
 
@@ -80,9 +80,9 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
 * | Static Public Method ZCL_ABAP_MOCKITO=>CLASS_CONSTRUCTOR
 * +-------------------------------------------------------------------------------------------------+
 * +--------------------------------------------------------------------------------------</SIGNATURE>
-  method CLASS_CONSTRUCTOR.
-    so_instance = new zcl_abap_mockito( ).
-  endmethod.
+  METHOD class_constructor.
+    so_instance = NEW zcl_abap_mockito( ).
+  ENDMETHOD.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -110,7 +110,12 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
     LOOP AT lt_public_method ASSIGNING FIELD-SYMBOL(<method1>).
       APPEND |method { <method1> }.| TO mt_source.
 
-      APPEND 'BREAK-POINT.endmethod.' TO mt_source.
+      APPEND 'rv_book_name = zcl_abap_mockito=>when( )->get_mocked_data(' TO mt_source.
+      APPEND 'io_cls = me' TO mt_source.
+      APPEND |iv_method_name = '{ <method1> }'| TO mt_source.
+      APPEND ' IV_argument = conv #( iv_index )' TO mt_source.
+      APPEND ').' TO mt_source.
+      APPEND 'endmethod.' TO mt_source.
     ENDLOOP.
     APPEND 'ENDCLASS.' TO mt_source.
   ENDMETHOD.
@@ -122,7 +127,7 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
 * | [--->] IV_CLASS_NAME                  TYPE        STRING
 * | [<-()] RO_STUB                        TYPE REF TO OBJECT
 * +--------------------------------------------------------------------------------------</SIGNATURE>
-  method GENERATE_STUB.
+  METHOD generate_stub.
     DATA(lv_new_cls_name) = iv_class_name && '_SUB'.
 
     TRANSLATE lv_new_cls_name TO UPPER CASE.
@@ -133,7 +138,7 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
       CATCH cx_root INTO DATA(cx_root).
         WRITE: / cx_root->get_text( ).
     ENDTRY.
-  endmethod.
+  ENDMETHOD.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -144,20 +149,20 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
 * | [--->] IV_ARGUMENT                    TYPE        STRING
 * | [<-()] RV_RESULT                      TYPE        STRING
 * +--------------------------------------------------------------------------------------</SIGNATURE>
-  method GET_MOCKED_DATA.
-    READ TABLE MT_MOCKED_DATA ASSIGNING FIELD-SYMBOL(<mocked>) with key cls_instance = io_cls.
+  METHOD get_mocked_data.
+    READ TABLE mt_mocked_data ASSIGNING FIELD-SYMBOL(<mocked>) WITH KEY cls_instance = io_cls.
     IF sy-subrc = 0.
-      READ TABLE <mocked>-mock_methods ASSIGNING FIELD-SYMBOL(<method>) with key name = iv_method_name
+      READ TABLE <mocked>-mock_methods ASSIGNING FIELD-SYMBOL(<method>) WITH KEY name = iv_method_name
         argument = iv_argument.
       IF sy-subrc = 0.
-         rv_result = <method>-result.
-         RETURN.
+        rv_result = <method>-result.
+        RETURN.
       ENDIF.
     ENDIF.
 
     log_stub( io_cls = io_cls iv_method_name = iv_method_name iv_argument = iv_argument ).
 
-  endmethod.
+  ENDMETHOD.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -167,24 +172,24 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
 * | [--->] IV_METHOD_NAME                 TYPE        STRING
 * | [--->] IV_ARGUMENT                    TYPE        STRING
 * +--------------------------------------------------------------------------------------</SIGNATURE>
-  method LOG_STUB.
+  METHOD log_stub.
 
-    READ TABLE MT_MOCKED_DATA ASSIGNING FIELD-SYMBOL(<mocked>) WITH KEY
+    READ TABLE mt_mocked_data ASSIGNING FIELD-SYMBOL(<mocked>) WITH KEY
      cls_instance = io_cls.
     IF sy-subrc <> 0.
-      data(ls_entry) = value ty_method( name = iv_method_name argument = iv_argument ).
-      data: lt_method type tt_method.
-      APPEND ls_entry to lt_method.
+      DATA(ls_entry) = VALUE ty_method( name = iv_method_name argument = iv_argument ).
+      DATA: lt_method TYPE tt_method.
+      APPEND ls_entry TO lt_method.
 
-      data(ls_mock) = value ty_mocked_data( cls_instance = io_cls mock_methods = lt_method ).
-      APPEND ls_mock to MT_MOCKED_DATA.
+      DATA(ls_mock) = VALUE ty_mocked_data( cls_instance = io_cls mock_methods = lt_method ).
+      APPEND ls_mock TO mt_mocked_data.
     ELSE.
-      data(ls_entry2) = value ty_method( name = iv_method_name argument = iv_argument ).
+      DATA(ls_entry2) = VALUE ty_method( name = iv_method_name argument = iv_argument ).
       APPEND ls_entry2 TO <mocked>-mock_methods.
     ENDIF.
 
-    ms_method_to_be_mocked = value #( cls_instance = io_cls method = iv_method_name argument = iv_argument ).
-  endmethod.
+    ms_method_to_be_mocked = VALUE #( cls_instance = io_cls method = iv_method_name argument = iv_argument ).
+  ENDMETHOD.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -193,12 +198,12 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
 * | [--->] IV_CLASS_NAME                  TYPE        STRING
 * | [<-()] RO_INSTANCE                    TYPE REF TO OBJECT
 * +--------------------------------------------------------------------------------------</SIGNATURE>
-  method MOCK.
-     clear: mt_source.
-     FILL_SOURCE_CODE( iv_class_name ).
+  METHOD mock.
+    CLEAR: mt_source.
+    fill_source_code( iv_class_name ).
 
-     ro_instance = GENERATE_stub( iv_class_name ).
-  endmethod.
+    ro_instance = generate_stub( iv_class_name ).
+  ENDMETHOD.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -206,17 +211,17 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
 * +-------------------------------------------------------------------------------------------------+
 * | [--->] IV_RETURN                      TYPE        STRING
 * +--------------------------------------------------------------------------------------</SIGNATURE>
-  method THEN_RETURN.
-    READ TABLE MT_MOCKED_DATA ASSIGNING FIELD-SYMBOL(<class>) WITH KEY cls_instance = MS_METHOD_TO_BE_MOCKED-cls_instance.
+  METHOD then_return.
+    READ TABLE mt_mocked_data ASSIGNING FIELD-SYMBOL(<class>) WITH KEY cls_instance = ms_method_to_be_mocked-cls_instance.
     ASSERT sy-subrc = 0.
 
-    READ TABLE <class>-mock_methods ASSIGNING FIELD-SYMBOL(<method>) with key name = MS_METHOD_TO_BE_MOCKED-method
-     argument = MS_METHOD_TO_BE_MOCKED-argument.
-    ASSERT SY-SUBRC = 0.
+    READ TABLE <class>-mock_methods ASSIGNING FIELD-SYMBOL(<method>) WITH KEY name = ms_method_to_be_mocked-method
+     argument = ms_method_to_be_mocked-argument.
+    ASSERT sy-subrc = 0.
 
-    <METHOD>-result = IV_RETURN.
+    <method>-result = iv_return.
 
-  endmethod.
+  ENDMETHOD.
 
 
 * <SIGNATURE>---------------------------------------------------------------------------------------+
@@ -225,7 +230,7 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
 * | [--->] IO_DUMMY                       TYPE        ANY(optional)
 * | [<-()] RO_INSTANCE                    TYPE REF TO ZCL_ABAP_MOCKITO
 * +--------------------------------------------------------------------------------------</SIGNATURE>
-  method WHEN.
+  METHOD when.
     ro_instance = so_instance.
-  endmethod.
+  ENDMETHOD.
 ENDCLASS.
