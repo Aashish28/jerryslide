@@ -21,6 +21,11 @@ public section.
   methods THEN_RETURN
     importing
       !IV_RETURN type STRING .
+  class-methods MOCK
+    importing
+      !IV_CLASS_NAME type STRING
+    returning
+      value(RO_INSTANCE) type ref to OBJECT .
 protected section.
 private section.
 
@@ -39,22 +44,31 @@ private section.
         end of tY_mocked_data .
   types:
     tt_mocked_data type STANDARD TABLE OF ty_mocked_data with key cls_instance .
-
-  types: BEGIN OF ty_to_be_mocked,
+  types:
+    BEGIN OF ty_to_be_mocked,
      cls_instance TYPE REF TO object,
      method TYPE string,
      argument TYPE string,
-     end of ty_to_be_mocked.
+     end of ty_to_be_mocked .
 
   class-data SO_INSTANCE type ref to ZCL_ABAP_MOCKITO .
   data MT_MOCKED_DATA type TT_MOCKED_DATA .
-  data MS_METHOD_TO_BE_MOCKED type ty_to_be_mocked .
+  data MS_METHOD_TO_BE_MOCKED type TY_TO_BE_MOCKED .
+  class-data MT_SOURCE type SEOP_SOURCE_STRING .
 
   methods LOG_STUB
     importing
       !IO_CLS type ref to OBJECT
       !IV_METHOD_NAME type STRING
       !IV_ARGUMENT type STRING .
+  class-methods FILL_SOURCE_CODE
+    importing
+      !IV_CLASS_NAME type STRING .
+  class-methods GENERATE_STUB
+    importing
+      !IV_CLASS_NAME type STRING
+    returning
+      value(RO_STUB) type ref to OBJECT .
 ENDCLASS.
 
 
@@ -68,6 +82,57 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
 * +--------------------------------------------------------------------------------------</SIGNATURE>
   method CLASS_CONSTRUCTOR.
     so_instance = new zcl_abap_mockito( ).
+  endmethod.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Static Private Method ZCL_ABAP_MOCKITO=>FILL_SOURCE_CODE
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] IV_CLASS_NAME                  TYPE        STRING
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  METHOD fill_source_code.
+    DATA:
+      lt_public_method TYPE TABLE OF seocmpname.
+
+    APPEND |program.class { iv_class_name }_SUB definition inheriting from { iv_class_name } |
+    & | create public. public section.| TO mt_source.
+
+    SELECT cmpname INTO TABLE lt_public_method FROM seocompo WHERE clsname = iv_class_name
+     AND cmptype = 1 AND mtdtype = 0.
+
+    LOOP AT lt_public_method ASSIGNING FIELD-SYMBOL(<method>).
+      APPEND |methods { <method> } redefinition.| TO mt_source.
+    ENDLOOP.
+
+    APPEND |protected section.private section.ENDCLASS.CLASS { iv_class_name }_SUB IMPLEMENTATION.|
+     TO mt_source.
+
+    LOOP AT lt_public_method ASSIGNING FIELD-SYMBOL(<method1>).
+      APPEND |method { <method1> }.| TO mt_source.
+
+      APPEND 'BREAK-POINT.endmethod.' TO mt_source.
+    ENDLOOP.
+    APPEND 'ENDCLASS.' TO mt_source.
+  ENDMETHOD.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Static Private Method ZCL_ABAP_MOCKITO=>GENERATE_STUB
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] IV_CLASS_NAME                  TYPE        STRING
+* | [<-()] RO_STUB                        TYPE REF TO OBJECT
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method GENERATE_STUB.
+    DATA(lv_new_cls_name) = iv_class_name && '_SUB'.
+
+    TRANSLATE lv_new_cls_name TO UPPER CASE.
+    TRY.
+        GENERATE SUBROUTINE POOL mt_source NAME DATA(prog).
+        DATA(class) = |\\PROGRAM={ prog }\\CLASS={ lv_new_cls_name }|.
+        CREATE OBJECT ro_stub TYPE (class).
+      CATCH cx_root INTO DATA(cx_root).
+        WRITE: / cx_root->get_text( ).
+    ENDTRY.
   endmethod.
 
 
@@ -119,6 +184,20 @@ CLASS ZCL_ABAP_MOCKITO IMPLEMENTATION.
     ENDIF.
 
     ms_method_to_be_mocked = value #( cls_instance = io_cls method = iv_method_name argument = iv_argument ).
+  endmethod.
+
+
+* <SIGNATURE>---------------------------------------------------------------------------------------+
+* | Static Public Method ZCL_ABAP_MOCKITO=>MOCK
+* +-------------------------------------------------------------------------------------------------+
+* | [--->] IV_CLASS_NAME                  TYPE        STRING
+* | [<-()] RO_INSTANCE                    TYPE REF TO OBJECT
+* +--------------------------------------------------------------------------------------</SIGNATURE>
+  method MOCK.
+     clear: mt_source.
+     FILL_SOURCE_CODE( iv_class_name ).
+
+     ro_instance = GENERATE_stub( iv_class_name ).
   endmethod.
 
 
